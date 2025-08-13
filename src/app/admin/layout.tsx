@@ -14,6 +14,7 @@ import {
 import { ToothIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 const sidebarNavItems = [
   {
@@ -45,6 +46,24 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+    if (isAuthenticated !== 'true') {
+      router.replace("/admin/login");
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("isAuthenticated");
+    router.push('/admin/login');
+  };
+  
+  if (!isClient) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -76,7 +95,7 @@ export default function AdminLayout({
                 <ChevronLeft className="h-4 w-4" />
                 Back to Main Site
             </Button>
-            <Button variant="destructive" className="w-full justify-start gap-3 mt-2" onClick={() => router.push('/admin/login')}>
+            <Button variant="destructive" className="w-full justify-start gap-3 mt-2" onClick={handleLogout}>
                 <LogOut className="h-4 w-4" />
                 Logout
             </Button>
@@ -94,4 +113,3 @@ export default function AdminLayout({
     </div>
   );
 }
-

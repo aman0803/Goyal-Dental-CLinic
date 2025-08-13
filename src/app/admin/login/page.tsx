@@ -23,11 +23,7 @@ export default function AdminLoginPage() {
             <LoginForm />
           </CardContent>
         </Card>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-            Demo credentials: admin / password
-        </p>
       </div>
     </div>
   );
 }
-

@@ -43,6 +43,7 @@ export function LoginForm() {
     // We'll simulate a successful login.
     setTimeout(() => {
         if (values.username === 'admin' && values.password === 'password') {
+            sessionStorage.setItem("isAuthenticated", "true");
             toast({
                 title: "Login Successful",
                 description: "Welcome back, Admin!",
@@ -96,4 +97,3 @@ export function LoginForm() {
     </Form>
   );
 }
-

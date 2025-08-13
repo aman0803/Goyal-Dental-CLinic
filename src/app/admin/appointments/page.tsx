@@ -8,8 +8,8 @@ import type { Appointment } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ListFilter, MoreHorizontal } from "lucide-react";
-import { useState } from "react";
+import { ListFilter } from "lucide-react";
+import { useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,11 +21,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminAppointmentsPage() {
+  const { toast } = useToast();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilters, setStatusFilters] = useState<string[]>(['Confirmed', 'Pending', 'Cancelled']);
+
+  useEffect(() => {
+    const storedAppointments = localStorage.getItem('appointments');
+    if (storedAppointments) {
+      setAppointments(JSON.parse(storedAppointments));
+    }
+  }, []);
 
   const handleFilterChange = (status: string) => {
     setStatusFilters(prev => 
@@ -40,7 +49,13 @@ export default function AdminAppointmentsPage() {
     .filter(apt => apt.patientName.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const deleteAppointment = (id: string) => {
-    setAppointments(prev => prev.filter(apt => apt.id !== id));
+    const updatedAppointments = appointments.filter(apt => apt.id !== id);
+    setAppointments(updatedAppointments);
+    localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    toast({
+        title: "Appointment Deleted",
+        description: "The appointment has been successfully deleted.",
+    })
   };
 
 
@@ -102,7 +117,7 @@ export default function AdminAppointmentsPage() {
                 {filteredAppointments.length > 0 ? filteredAppointments.map((apt) => (
                   <TableRow key={apt.id}>
                     <TableCell className="font-medium">{apt.patientName}</TableCell>
-                    <TableCell className="hidden md:table-cell">{apt.date}</TableCell>
+                    <TableCell className="hidden md:table-cell">{new Date(apt.date).toLocaleDateString()}</TableCell>
                     <TableCell className="hidden md:table-cell">{apt.time}</TableCell>
                     <TableCell>{apt.reason}</TableCell>
                     <TableCell>
