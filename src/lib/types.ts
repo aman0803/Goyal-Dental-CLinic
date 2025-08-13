@@ -38,6 +38,7 @@ export type Prescription = {
   medications: Medication[];
   diagnoses?: Diagnosis[];
   treatmentPlan?: string;
+  advice?: string;
 };
 
 export type DayAvailability = {

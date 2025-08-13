@@ -127,7 +127,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                       </div>
                     )}
                    
-                    <div>
+                    <div className="border-b pb-4">
                         <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Rx (Medications)</p>
                         <div className="space-y-4">
                             {prescription.medications.map((med, index) => (
@@ -139,6 +139,13 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                             ))}
                         </div>
                     </div>
+
+                    {prescription.advice && (
+                       <div className="pb-4">
+                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-1">Advice</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{prescription.advice}</p>
+                      </div>
+                    )}
                     
                     <div className="border-t pt-4 mt-8">
                         <p className="text-sm text-muted-foreground">Signature:</p>

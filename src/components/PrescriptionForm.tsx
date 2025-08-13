@@ -49,6 +49,7 @@ const formSchema = z.object({
   diagnoses: z.array(diagnosisSchema).optional(),
   treatmentPlan: z.string().optional(),
   medications: z.array(medicationSchema).min(1, { message: "At least one medication is required." }),
+  advice: z.string().optional(),
 });
 
 const allMedicines = [
@@ -130,6 +131,7 @@ export function PrescriptionForm() {
       diagnoses: [{ toothNumber: "", description: "" }],
       treatmentPlan: "",
       medications: [{ name: "", dosage: "", instructions: "" }],
+      advice: "",
     },
   });
 
@@ -331,6 +333,20 @@ export function PrescriptionForm() {
                 <FormMessage>{form.formState.errors.medications?.root?.message}</FormMessage>
             </div>
         </div>
+
+        <FormField
+          control={form.control}
+          name="advice"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Advice (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Avoid hot and cold beverages for 24 hours. Follow-up in 1 week." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         
         <div className="flex gap-2">
             <Button type="submit">Create Prescription</Button>
