@@ -50,13 +50,33 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const authStatus = sessionStorage.getItem("isAuthenticated") === "true";
+    setIsAuthenticated(authStatus);
+    if (!authStatus) {
+      router.replace('/login');
+    }
+  }, [router]);
   
   const handleLogout = () => {
     sessionStorage.removeItem("isAuthenticated");
     router.push('/login');
   };
+
+  if (isAuthenticated === null) {
+      return (
+        <div className="flex min-h-screen items-center justify-center">
+            <p>Loading...</p>
+        </div>
+      );
+  }
+
+  if (!isAuthenticated) {
+      return null;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -74,7 +94,7 @@ export default function AdminLayout({
               href={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50",
-                pathname === item.href &&
+                usePathname() === item.href &&
                   "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50"
               )}
             >
