@@ -65,14 +65,17 @@ const allMedicines = [
     { value: 'cephalexin', label: 'Cephalexin (Keflex)' },
     { value: 'doxycycline', label: 'Doxycycline' },
     { value: 'erythromycin', label: 'Erythromycin' },
+    { value: 'amoxicillin-clavulanate', label: 'Amoxicillin/Clavulanate (Augmentin)'},
     { heading: "Antiseptic Rinses" },
     { value: 'chlorhexidine-gluconate', label: 'Chlorhexidine Gluconate Rinse (Peridex)' },
     { value: 'hydrogen-peroxide-rinse', label: 'Hydrogen Peroxide Rinse' },
     { value: 'listerine-antiseptic', label: 'Listerine Antiseptic' },
+    { value: 'cetylpyridinium-chloride', label: 'Cetylpyridinium Chloride (CPC) Rinse'},
     { heading: "Antifungals" },
     { value: 'nystatin', label: 'Nystatin' },
     { value: 'clotrimazole', label: 'Clotrimazole Troches' },
     { value: 'fluconazole', label: 'Fluconazole (Diflucan)' },
+    { value: 'miconazole', label: 'Miconazole Oral Gel'},
     { heading: "Antivirals" },
     { value: 'acyclovir', label: 'Acyclovir (Zovirax)' },
     { value: 'valacyclovir', label: 'Valacyclovir (Valtrex)' },
@@ -80,18 +83,24 @@ const allMedicines = [
     { heading: "Topical Anesthetics" },
     { value: 'lidocaine-viscous', label: 'Lidocaine (Viscous)' },
     { value: 'benzocaine', label: 'Benzocaine (Orajel)' },
+    { value: 'tetracaine', label: 'Tetracaine'},
+    { value: 'dyclonine', label: 'Dyclonine Rinse'},
     { heading: "Corticosteroids" },
     { value: 'dexamethasone', label: 'Dexamethasone' },
     { value: 'prednisolone', label: 'Prednisolone' },
     { value: 'triamcinolone-acetonide', label: 'Triamcinolone Acetonide (in Orabase)'},
+    { value: 'hydrocortisone-cream', label: 'Hydrocortisone Cream'},
     { heading: "Fluoride Treatments" },
     { value: 'sodium-fluoride-rinse', label: 'Sodium Fluoride Rinse (Phos-Flur)' },
     { value: 'stannous-fluoride-gel', label: 'Stannous Fluoride Gel (Gel-Kam)' },
     { value: 'prevident-5000', label: 'Prevident 5000 Plus' },
+    { value: 'fluoride-varnish', label: 'Fluoride Varnish'},
     { heading: "Sedatives (for Anxiety)" },
     { value: 'diazepam', label: 'Diazepam (Valium)' },
     { value: 'triazolam', label: 'Triazolam (Halcion)' },
     { value: 'lorazepam', label: 'Lorazepam (Ativan)' },
+    { value: 'midazolam', label: 'Midazolam (Versed)'},
+    { value: 'nitrous-oxide', label: 'Nitrous Oxide'},
 ];
 
 
@@ -298,5 +307,3 @@ function MedicationCombobox({ field }: { field: any }) {
     </Popover>
   )
 }
-
-    
