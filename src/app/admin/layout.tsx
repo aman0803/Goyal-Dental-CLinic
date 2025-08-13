@@ -88,7 +88,7 @@ export default function AdminLayout({
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <ToothIcon className="h-6 w-6 text-primary" />
-            <span>Goyal Dental</span>
+            <span>Goyal Dental Clinic</span>
           </Link>
         </div>
         <nav className="flex-1 space-y-2 p-4">

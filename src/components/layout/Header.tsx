@@ -71,7 +71,7 @@ export default function Header() {
               <SheetContent side="left">
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
                   <ToothIcon className="h-6 w-6 text-primary" />
-                  <span className="font-bold font-headline">Goyal Dental</span>
+                  <span className="font-bold font-headline">Goyal Dental Clinic</span>
                 </Link>
                 <nav className="grid gap-y-6">
                   {navLinks.map((link) => (
@@ -102,7 +102,7 @@ export default function Header() {
           
           <Link href="/" className="flex items-center space-x-2 md:hidden">
             <ToothIcon className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline">Goyal Dental</span>
+            <span className="font-bold font-headline">Goyal Dental Clinic</span>
           </Link>
 
           <div className="flex items-center gap-2">
