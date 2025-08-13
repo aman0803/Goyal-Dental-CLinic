@@ -8,7 +8,7 @@ import type { Appointment } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ListFilter } from "lucide-react";
+import { ListFilter, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
   AlertDialog,
@@ -43,6 +43,19 @@ export default function AdminAppointmentsPage() {
         : [...prev, status]
     );
   };
+  
+  const updateAppointmentStatus = (id: string, status: Appointment['status']) => {
+    const updatedAppointments = appointments.map(apt => 
+        apt.id === id ? { ...apt, status: status } : apt
+    );
+    setAppointments(updatedAppointments);
+    localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    toast({
+        title: `Appointment ${status}`,
+        description: `The appointment has been marked as ${status.toLowerCase()}.`,
+    })
+  };
+
 
   const filteredAppointments = appointments
     .filter(apt => statusFilters.includes(apt.status))
@@ -125,7 +138,22 @@ export default function AdminAppointmentsPage() {
                           {apt.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right space-x-2">
+                      {apt.status === 'Pending' && (
+                        <>
+                          <Button variant="outline" size="sm" onClick={() => updateAppointmentStatus(apt.id, 'Confirmed')}>
+                              <CheckCircle className="h-4 w-4 mr-1"/> Confirm
+                          </Button>
+                           <Button variant="outline" size="sm" onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}>
+                               <XCircle className="h-4 w-4 mr-1" /> Cancel
+                           </Button>
+                        </>
+                      )}
+                      {apt.status === 'Confirmed' && (
+                          <Button variant="outline" size="sm" onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}>
+                              <XCircle className="h-4 w-4 mr-1" /> Cancel
+                          </Button>
+                      )}
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                            <Button variant="destructive" size="sm">Delete</Button>

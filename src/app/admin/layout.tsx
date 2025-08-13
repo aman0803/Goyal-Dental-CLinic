@@ -46,23 +46,31 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsClient(true);
-    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
-    if (isAuthenticated !== 'true') {
+    const authStatus = sessionStorage.getItem("isAuthenticated") === 'true';
+    setIsAuthenticated(authStatus);
+    if (!authStatus) {
       router.replace("/admin/login");
+    } else {
+      setIsLoading(false);
     }
   }, [router]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
     router.push('/admin/login');
   };
   
-  if (!isClient) {
-    return null; // Or a loading spinner
+  if (isLoading) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+            <p>Loading...</p>
+        </div>
+    );
   }
 
   return (
