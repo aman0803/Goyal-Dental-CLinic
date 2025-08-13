@@ -55,6 +55,7 @@ export default function AdminLayout({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // This effect now only runs on the client-side for admin pages
     try {
       const authStatus = sessionStorage.getItem("isAuthenticated") === 'true';
       setIsAuthenticated(authStatus);
@@ -62,7 +63,7 @@ export default function AdminLayout({
         router.replace("/login");
       }
     } catch (e) {
-      // sessionStorage is not available
+      // sessionStorage is not available during server-side rendering or in some browser modes
       setIsAuthenticated(false);
       router.replace("/login");
     }
@@ -74,6 +75,7 @@ export default function AdminLayout({
     router.push('/login');
   };
   
+  // A loading state while we verify authentication.
   if (isAuthenticated === null) {
     return (
         <div className="flex items-center justify-center min-h-screen">
@@ -82,8 +84,9 @@ export default function AdminLayout({
     );
   }
 
+  // If not authenticated, we'll be redirecting, so render nothing to avoid a flash of content.
   if (!isAuthenticated) {
-    return null; // or a redirect component
+    return null;
   }
 
   return (
