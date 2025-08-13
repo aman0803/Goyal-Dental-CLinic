@@ -62,6 +62,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                                     <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
                                     <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>
                                     <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
+                                    <p className="text-sm text-muted-foreground">Phone: 9929270337</p>
                                 </div>
                             </div>
                         </div>
@@ -113,4 +114,3 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
-
