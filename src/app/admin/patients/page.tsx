@@ -7,7 +7,7 @@ import type { Patient } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserPlus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -27,8 +27,29 @@ export default function AdminPatientsPage() {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
 
+    useEffect(() => {
+        const storedPatients = localStorage.getItem('patients');
+        if (storedPatients) {
+            setPatients(JSON.parse(storedPatients));
+        } else {
+            // Pre-populate with one patient if none are in localStorage
+            const initialPatient = {
+                id: '1',
+                name: 'Anjali Sharma',
+                email: 'anjali.sharma@example.com',
+                phone: '9876543210',
+                joinedDate: new Date().toLocaleDateString()
+            };
+            setPatients([initialPatient]);
+            localStorage.setItem('patients', JSON.stringify([initialPatient]));
+        }
+    }, []);
+
+
     const deletePatient = (id: string) => {
-        setPatients(prev => prev.filter(p => p.id !== id));
+        const updatedPatients = patients.filter(p => p.id !== id);
+        setPatients(updatedPatients);
+        localStorage.setItem('patients', JSON.stringify(updatedPatients));
         toast({
             title: "Patient Deleted",
             description: "The patient record has been successfully deleted.",

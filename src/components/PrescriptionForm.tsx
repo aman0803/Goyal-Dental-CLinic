@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import type { Patient } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,10 +44,6 @@ const formSchema = z.object({
   medications: z.array(medicationSchema).min(1, { message: "At least one medication is required." }),
 });
 
-const mockPatients = [
-    // This will be empty now
-];
-
 const allMedicines = [
     { value: 'amoxicillin', label: 'Amoxicillin' },
     { value: 'ibuprofen', label: 'Ibuprofen' },
@@ -63,6 +60,14 @@ const allMedicines = [
 export function PrescriptionForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const [patients, setPatients] = useState<Patient[]>([]);
+
+  useEffect(() => {
+    const storedPatients = localStorage.getItem('patients');
+    if (storedPatients) {
+        setPatients(JSON.parse(storedPatients));
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,14 +100,14 @@ export function PrescriptionForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Patient Name</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={mockPatients.length === 0}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={patients.length === 0}>
                     <FormControl>
                     <SelectTrigger>
-                        <SelectValue placeholder={mockPatients.length > 0 ? "Select a patient" : "No patients available. Add a patient first."} />
+                        <SelectValue placeholder={patients.length > 0 ? "Select a patient" : "No patients available. Add a patient first."} />
                     </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                        {mockPatients.map(p => (
+                        {patients.map(p => (
                             <SelectItem key={p.id} value={p.name}>{p.name}</SelectItem>
                         ))}
                     </SelectContent>

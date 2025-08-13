@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { format } from 'date-fns';
+import type { Patient } from "@/lib/types";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -41,9 +42,18 @@ export default function NewPatientPage() {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        // Here you would typically handle form submission, e.g., send data to an API
-        // For now, we'll just show a toast and navigate back
+        const storedPatients = localStorage.getItem('patients');
+        const patients: Patient[] = storedPatients ? JSON.parse(storedPatients) : [];
+        
+        const newPatient: Patient = {
+            id: new Date().getTime().toString(), // simple unique id
+            ...values,
+            joinedDate: new Date().toLocaleDateString(),
+        };
+
+        const updatedPatients = [...patients, newPatient];
+        localStorage.setItem('patients', JSON.stringify(updatedPatients));
+
         toast({
             title: "Patient Added",
             description: `${values.name} has been successfully added to the patient records.`,
