@@ -70,12 +70,12 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                                 <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
                                 <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>
                                 <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
-                                <p className="text-sm text-muted-foreground">Phone: 9929270337</p>
+                                <p className="text-sm text-muted-foreground print:hidden">Phone: 9929270337</p>
                             </div>
                         </div>
                         <div className="text-right shrink-0">
                              <h1 className="text-2xl font-bold text-primary">PRESCRIPTION</h1>
-                             <p className="text-sm text-muted-foreground">ID: {prescription.id}</p>
+                             <p className="text-sm text-muted-foreground print:hidden">ID: {prescription.id}</p>
                         </div>
                     </div>
                 </CardHeader>
