@@ -39,10 +39,6 @@ export default function Footer() {
                 <Phone className="h-5 w-5 mr-2 shrink-0 text-primary" />
                 <a href="tel:9929270337" className="text-sm text-muted-foreground hover:text-primary transition-colors">9929270337</a>
               </li>
-              <li className="flex items-center">
-                <Mail className="h-5 w-5 mr-2 shrink-0 text-primary" />
-                <a href="mailto:info@goyaldental.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">info@goyaldental.com</a>
-              </li>
             </ul>
           </div>
           <div className="space-y-4">

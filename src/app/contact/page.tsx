@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/layout/Header";
@@ -27,9 +27,6 @@ import Footer from "@/components/layout/Footer";
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
   }),
   message: z.string().min(10, {
     message: "Message must be at least 10 characters.",
@@ -43,7 +40,6 @@ export default function ContactPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      email: "",
       message: "",
     },
   });
@@ -92,19 +88,6 @@ export default function ContactPage() {
                   />
                   <FormField
                     control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="you@example.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
                     name="message"
                     render={({ field }) => (
                       <FormItem>
@@ -142,13 +125,6 @@ export default function ContactPage() {
                             <div>
                                 <h3 className="font-semibold">Phone</h3>
                                 <a href="tel:9929270337" className="text-muted-foreground hover:text-primary transition-colors">9929270337</a>
-                            </div>
-                        </li>
-                        <li className="flex items-start">
-                            <Mail className="h-6 w-6 mt-1 mr-4 shrink-0 text-primary" />
-                            <div>
-                                <h3 className="font-semibold">Email</h3>
-                                <a href="mailto:info@goyaldental.com" className="text-muted-foreground hover:text-primary transition-colors">info@goyaldental.com</a>
                             </div>
                         </li>
                     </ul>
