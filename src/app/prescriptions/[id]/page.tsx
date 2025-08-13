@@ -60,7 +60,8 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                                 <ToothIcon className="h-10 w-10 text-primary" />
                                 <div>
                                     <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
-                                    <p className="text-sm text-muted-foreground">Your trusted dental care partner</p>
+                                    <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>
+                                    <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
                                 </div>
                             </div>
                         </div>
@@ -82,8 +83,8 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                         </div>
                     </div>
                    
-                    <div className="space-y-4">
-                        <p className="text-sm font-semibold text-muted-foreground uppercase">Rx (Medications)</p>
+                    <div>
+                        <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Rx (Medications)</p>
                         <div className="space-y-4">
                             {prescription.medications.map((med, index) => (
                                 <div key={index} className="border-b pb-3 last:border-b-0">
@@ -95,9 +96,9 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                         </div>
                     </div>
                     
-                    <div className="border-t pt-4 text-right">
-                        <p className="text-lg font-semibold">{prescription.doctorName}</p>
-                        <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
+                    <div className="border-t pt-4 mt-8">
+                        <p className="text-sm text-muted-foreground">Signature:</p>
+                        <div className="h-16 border-b"></div>
                     </div>
 
                 </CardContent>
@@ -112,3 +113,4 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
+
