@@ -42,7 +42,7 @@ export function LoginForm() {
     // In a real app, you'd have authentication logic here.
     // We'll simulate a successful login.
     setTimeout(() => {
-        if (values.username === 'admin' && values.password === 'password') {
+        if (values.username === 'goyaldental' && values.password === 'sushil@2902') {
             sessionStorage.setItem("isAuthenticated", "true");
             toast({
                 title: "Login Successful",
