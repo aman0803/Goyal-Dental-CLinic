@@ -147,7 +147,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                       </div>
                     )}
                     
-                    <div className="border-t pt-4 mt-8 print:hidden">
+                    <div className="border-t pt-4 mt-8">
                         <p className="text-sm text-muted-foreground">Signature:</p>
                         <div className="h-16 border-b"></div>
                     </div>
@@ -162,6 +162,11 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
             </div>
         </div>
         <style jsx global>{`
+            @page {
+                size: auto;
+                margin: 0mm;
+            }
+
             @media print {
                 body {
                     background-color: white;
@@ -181,4 +186,5 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
+
 
