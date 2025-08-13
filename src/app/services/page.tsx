@@ -31,7 +31,7 @@ const services = [
     description: "Maintain your oral health with our comprehensive general dentistry services. This includes routine check-ups, professional cleanings, fillings, and preventive care for the whole family.",
     image: {
       src: "https://placehold.co/600x400.png",
-      hint: "dentist patient"
+      hint: "dentist with patient"
     }
   },
   {
