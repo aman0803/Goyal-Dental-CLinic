@@ -65,27 +65,24 @@ export function AppointmentForm() {
   });
 
   const handleDateChange = (date: Date | undefined) => {
+    if (!date) return;
     form.setValue('appointmentDate', date, { shouldValidate: true });
     form.setValue('appointmentTime', ''); // Reset time when date changes
     
-    if (date) {
-      // 1. Get doctor's general availability for the selected day of the week
-      const dayOfWeek = dayMap[getDay(date)];
-      const doctorsSlotsForDay = doctorAvailability?.find(d => d.day === dayOfWeek)?.slots || allTimeSlots;
+    // 1. Get doctor's general availability for the selected day of the week
+    const dayOfWeek = dayMap[getDay(date)];
+    const doctorsSlotsForDay = doctorAvailability?.find(d => d.day === dayOfWeek)?.slots || allTimeSlots;
 
-      // 2. Get already booked slots for the selected date
-      const storedAppointments = localStorage.getItem('appointments');
-      const allAppointments: Appointment[] = storedAppointments ? JSON.parse(storedAppointments) : [];
-      const bookedSlots = allAppointments
-        .filter(apt => new Date(apt.date).toDateString() === date.toDateString())
-        .map(apt => apt.time);
-      
-      // 3. Final available slots are doctor's slots minus booked slots
-      const availableSlots = doctorsSlotsForDay.filter(slot => !bookedSlots.includes(slot));
-      setAvailableTimeSlots(availableSlots);
-    } else {
-        setAvailableTimeSlots([]);
-    }
+    // 2. Get already booked slots for the selected date
+    const storedAppointments = localStorage.getItem('appointments');
+    const allAppointments: Appointment[] = storedAppointments ? JSON.parse(storedAppointments) : [];
+    const bookedSlots = allAppointments
+      .filter(apt => new Date(apt.date).toDateString() === date.toDateString())
+      .map(apt => apt.time);
+    
+    // 3. Final available slots are doctor's slots minus booked slots
+    const availableSlots = doctorsSlotsForDay.filter(slot => !bookedSlots.includes(slot));
+    setAvailableTimeSlots(availableSlots);
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -109,8 +106,9 @@ export function AppointmentForm() {
       description: `Thank you, ${values.name}. We have received your request for ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime}. We will contact you shortly to confirm.`,
     });
     form.reset({ name: "", phone: "", reason: "" });
-    form.setValue('appointmentDate', undefined);
-    form.setValue('appointmentTime', undefined);
+    form.setValue('appointmentDate', undefined, { shouldValidate: false });
+    form.setValue('appointmentTime', undefined, { shouldValidate: false });
+    setAvailableTimeSlots([]);
   }
 
   return (
@@ -172,7 +170,7 @@ export function AppointmentForm() {
                     <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={handleDateChange}
+                        onSelect={(date) => handleDateChange(date)}
                         disabled={(date) =>
                         date < new Date(new Date().setHours(0,0,0,0)) || date.getDay() === 0 // Disable past dates and Sundays
                         }

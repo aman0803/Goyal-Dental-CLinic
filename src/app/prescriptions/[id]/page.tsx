@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -113,5 +112,3 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
-
-

@@ -19,7 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { format } from 'date-fns';
 import type { Patient } from "@/lib/types";
 
 const formSchema = z.object({

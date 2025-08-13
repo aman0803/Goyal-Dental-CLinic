@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, User, BriefcaseMedical, CalendarCheck } from "lucide-react";
+import { Menu, BriefcaseMedical, CalendarCheck } from "lucide-react";
 import { ToothIcon } from "../icons";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";

@@ -18,4 +18,3 @@ export const ToothIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <path d="M12 12v3.6M15.2 13.5l-1.7 2.1M8.8 13.5l1.7 2.1" />
   </svg>
 );
-

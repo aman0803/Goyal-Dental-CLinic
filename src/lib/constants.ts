@@ -5,4 +5,3 @@ export const allTimeSlots = [
   "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM",
   "06:00 PM", "06:30 PM", "07:00 PM"
 ];
-
