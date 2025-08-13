@@ -15,16 +15,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import type { Patient } from "@/lib/types";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email." }),
   phone: z.string().regex(/^\d{10}$/, { message: "Please enter a valid 10-digit phone number." }),
+  medicalHistory: z.string().optional(),
+  xrayImage: z
+    .any()
+    .refine((files) => files?.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+    .refine(
+      (files) => files?.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      ".jpg, .jpeg, .png and .webp files are accepted."
+    ).optional(),
 });
 
 export default function NewPatientPage() {
@@ -37,17 +50,34 @@ export default function NewPatientPage() {
             name: "",
             email: "",
             phone: "",
+            medicalHistory: "",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const fileRef = form.register("xrayImage");
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         const storedPatients = localStorage.getItem('patients');
         const patients: Patient[] = storedPatients ? JSON.parse(storedPatients) : [];
         
+        let xrayImageDataUri: string | undefined = undefined;
+        if (values.xrayImage && values.xrayImage.length > 0) {
+            const file = values.xrayImage[0];
+            const reader = new FileReader();
+            xrayImageDataUri = await new Promise((resolve) => {
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.readAsDataURL(file);
+            });
+        }
+
         const newPatient: Patient = {
             id: new Date().getTime().toString(), // simple unique id
-            ...values,
+            name: values.name,
+            email: values.email,
+            phone: values.phone,
             joinedDate: new Date().toLocaleDateString(),
+            medicalHistory: values.medicalHistory,
+            xrayImage: xrayImageDataUri,
         };
 
         const updatedPatients = [...patients, newPatient];
@@ -118,6 +148,32 @@ export default function NewPatientPage() {
                                     <Input placeholder="9876543210" {...field} />
                                 </FormControl>
                                 <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="medicalHistory"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Medical History (Optional)</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="e.g., Allergies, past surgeries, current medications..." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="xrayImage"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Patient X-Ray (Optional)</FormLabel>
+                                    <FormControl>
+                                         <Input type="file" accept="image/*" {...fileRef} />
+                                    </FormControl>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                             />

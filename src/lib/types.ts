@@ -21,6 +21,8 @@ export type Patient = {
   email: string;
   phone: string;
   joinedDate: string;
+  medicalHistory?: string;
+  xrayImage?: string; // a base64 data URI
 };
 
 export type Prescription = {

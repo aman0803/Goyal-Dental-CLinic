@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import type { Patient } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserPlus, Trash2 } from "lucide-react";
+import { UserPlus, Trash2, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
@@ -21,9 +21,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function AdminPatientsPage() {
     const { toast } = useToast();
+    const router = useRouter();
     const [patients, setPatients] = useState<Patient[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -104,7 +106,11 @@ export default function AdminPatientsPage() {
                     <TableCell className="hidden md:table-cell">{patient.email}</TableCell>
                     <TableCell>{patient.phone}</TableCell>
                     <TableCell className="hidden sm:table-cell">{patient.joinedDate}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right space-x-2">
+                         <Button variant="outline" size="sm" onClick={() => router.push(`/admin/patients/${patient.id}`)}>
+                            <Eye className="h-4 w-4" />
+                            <span className="sr-only">View</span>
+                        </Button>
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
                                 <Button variant="destructive" size="sm">
