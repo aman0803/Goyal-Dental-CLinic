@@ -1,13 +1,13 @@
 
 import Link from "next/link";
 import { ToothIcon } from "../icons";
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-white border-t">
       <div className="container py-12 px-4 md:px-6">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
               <ToothIcon className="h-8 w-16 text-primary" />
@@ -40,14 +40,6 @@ export default function Footer() {
                 <a href="tel:9929270337" className="text-sm text-muted-foreground hover:text-primary transition-colors">9929270337</a>
               </li>
             </ul>
-          </div>
-          <div className="space-y-4">
-            <h4 className="font-semibold text-lg font-headline">Follow Us</h4>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors"><Facebook /></Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors"><Instagram /></Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors"><Twitter /></Link>
-            </div>
           </div>
         </div>
         <div className="mt-8 border-t pt-6 text-center text-sm text-muted-foreground">

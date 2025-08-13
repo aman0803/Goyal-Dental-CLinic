@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   title: "Goyal Dental Clinic",
   description:
     "Providing high-quality dental care in a comfortable and modern environment.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default function RootLayout({
