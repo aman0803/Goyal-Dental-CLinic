@@ -6,13 +6,44 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import type { Prescription } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilePlus, Download, Eye } from "lucide-react";
+import { FilePlus, Download, Eye, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function AdminPrescriptionsPage() {
+  const { toast } = useToast();
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const storedPrescriptions = localStorage.getItem('prescriptions');
+    if (storedPrescriptions) {
+        setPrescriptions(JSON.parse(storedPrescriptions));
+    }
+  }, []);
+
+  const deletePrescription = (id: string) => {
+    const updatedPrescriptions = prescriptions.filter(p => p.id !== id);
+    setPrescriptions(updatedPrescriptions);
+    localStorage.setItem('prescriptions', JSON.stringify(updatedPrescriptions));
+    toast({
+        title: "Prescription Deleted",
+        description: "The prescription has been successfully deleted.",
+    })
+  };
 
   const filteredPrescriptions = prescriptions.filter(p =>
     p.patientName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -65,9 +96,28 @@ export default function AdminPrescriptionsPage() {
                         <Button variant="outline" size="sm" asChild>
                             <Link href={`/prescriptions/${p.id}`}><Eye className="h-4 w-4" /></Link>
                         </Button>
-                        <Button variant="outline" size="sm">
-                            <Download className="h-4 w-4" />
-                        </Button>
+                         <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button variant="destructive" size="sm">
+                                    <Trash2 className="h-4 w-4" />
+                                    <span className="sr-only">Delete</span>
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete this prescription.
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => deletePrescription(p.id)}>
+                                    Delete
+                                </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </TableCell>
                     </TableRow>
                 )) : (

@@ -7,18 +7,37 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ToothIcon } from "@/components/icons";
 import { Download, Printer } from "lucide-react";
 import type { Prescription } from "@/lib/types";
+import { useState, useEffect } from "react";
 
-// Mock data fetching function - in a real app this would fetch from a database
 const getPrescriptionById = (id: string): Prescription | null => {
-    // This is just a placeholder. In a real app you would have a list of prescriptions
-    // and find the one with the matching id. Since we cleared mock data, this will
-    // likely not find anything unless you add a prescription first.
-    return null;
+    const storedPrescriptions = localStorage.getItem('prescriptions');
+    if (!storedPrescriptions) return null;
+    
+    const prescriptions: Prescription[] = JSON.parse(storedPrescriptions);
+    return prescriptions.find(p => p.id === id) || null;
 }
 
 
 export default function PrescriptionViewPage({ params }: { params: { id: string } }) {
-    const prescription = getPrescriptionById(params.id);
+    const [prescription, setPrescription] = useState<Prescription | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const foundPrescription = getPrescriptionById(params.id);
+        setPrescription(foundPrescription);
+        setIsLoading(false);
+    }, [params.id]);
+
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 text-center">
+                <Card className="w-full max-w-md p-8">
+                    <p>Loading prescription...</p>
+                </Card>
+            </div>
+        )
+    }
 
     if (!prescription) {
         return (
@@ -84,12 +103,15 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
 
                 </CardContent>
             </Card>
-            <div className="flex justify-end gap-2">
-                <Button variant="outline"><Printer className="mr-2 h-4 w-4"/> Print</Button>
-                <Button><Download className="mr-2 h-4 w-4"/> Download PDF</Button>
+            <div className="flex justify-end gap-2 print:hidden">
+                <Button variant="outline" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4"/> Print</Button>
+                <Button disabled>
+                  <Download className="mr-2 h-4 w-4"/> Download PDF
+                </Button>
             </div>
         </div>
     </div>
   );
 }
+
 

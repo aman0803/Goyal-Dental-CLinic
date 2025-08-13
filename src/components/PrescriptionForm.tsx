@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import type { Patient } from "@/lib/types";
+import type { Patient, Prescription } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -83,7 +83,19 @@ export function PrescriptionForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const storedPrescriptions = localStorage.getItem('prescriptions');
+    const prescriptions: Prescription[] = storedPrescriptions ? JSON.parse(storedPrescriptions) : [];
+
+    const newPrescription: Prescription = {
+        id: new Date().getTime().toString(),
+        ...values,
+        doctorName: "Dr. Sushil Kumar Goyal", // Or make this selectable
+        date: new Date().toLocaleDateString(),
+    };
+
+    const updatedPrescriptions = [...prescriptions, newPrescription];
+    localStorage.setItem('prescriptions', JSON.stringify(updatedPrescriptions));
+
     toast({
       title: "Prescription Created",
       description: `A new prescription for ${values.patientName} has been saved.`,
@@ -181,7 +193,7 @@ export function PrescriptionForm() {
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Medication
                 </Button>
-                <FormMessage>{form.formState.errors.medications?.message}</FormMessage>
+                <FormMessage>{form.formState.errors.medications?.root?.message}</FormMessage>
             </div>
         </div>
         
