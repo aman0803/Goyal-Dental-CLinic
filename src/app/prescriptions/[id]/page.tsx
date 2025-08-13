@@ -2,11 +2,12 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ToothIcon } from "@/components/icons";
 import { Download, Printer } from "lucide-react";
 import type { Prescription } from "@/lib/types";
 import { useState, useEffect } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const getPrescriptionById = (id: string): Prescription | null => {
     const storedPrescriptions = localStorage.getItem('prescriptions');
@@ -50,23 +51,21 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     }
   
     return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-        <div className="w-full max-w-2xl space-y-4">
-            <Card className="shadow-lg">
+    <div className="flex justify-center items-start min-h-screen bg-gray-100 p-4 sm:p-8">
+        <div className="w-full max-w-4xl space-y-4">
+            <Card className="shadow-lg" id="prescription-content">
                 <CardHeader className="bg-primary/10 border-b p-6">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <ToothIcon className="h-10 w-10 text-primary" />
-                                <div>
-                                    <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
-                                    <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>
-                                    <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
-                                    <p className="text-sm text-muted-foreground">Phone: 9929270337</p>
-                                </div>
+                    <div className="flex justify-between items-start flex-wrap gap-4">
+                        <div className="flex items-center gap-3">
+                            <ToothIcon className="h-10 w-10 text-primary" />
+                            <div>
+                                <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
+                                <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>
+                                <p className="text-sm text-muted-foreground">BDS, Cosmetic and Oral Dental Surgeon</p>
+                                <p className="text-sm text-muted-foreground">Phone: 9929270337</p>
                             </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right shrink-0">
                              <h1 className="text-2xl font-bold text-primary">PRESCRIPTION</h1>
                              <p className="text-sm text-muted-foreground">ID: {prescription.id}</p>
                         </div>
@@ -84,10 +83,25 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                         </div>
                     </div>
 
-                    {prescription.diagnosis && (
+                    {prescription.diagnoses && prescription.diagnoses.length > 0 && (
                       <div className="border-b pb-4">
-                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-1">Diagnosis</p>
-                          <p className="text-gray-700 whitespace-pre-wrap">{prescription.diagnosis}</p>
+                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Diagnosis</p>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[100px]">Tooth #</TableHead>
+                                        <TableHead>Description</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {prescription.diagnoses.map((d, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell className="font-medium">{d.toothNumber || 'N/A'}</TableCell>
+                                        <TableCell>{d.description}</TableCell>
+                                    </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
                       </div>
                     )}
                     
@@ -125,6 +139,24 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                 </Button>
             </div>
         </div>
+        <style jsx global>{`
+            @media print {
+                body {
+                    background-color: white;
+                }
+                .print\\:hidden {
+                    display: none;
+                }
+                #prescription-content {
+                    box-shadow: none;
+                    border: none;
+                }
+                 .flex.justify-center.items-start {
+                    padding: 0;
+                }
+            }
+        `}</style>
     </div>
   );
 }
+

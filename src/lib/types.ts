@@ -5,6 +5,11 @@ export type Medication = {
   instructions: string;
 }
 
+export type Diagnosis = {
+  toothNumber?: string;
+  description: string;
+};
+
 export type Appointment = {
   id: string;
   patientName: string;
@@ -31,7 +36,7 @@ export type Prescription = {
   doctorName: string;
   date: string;
   medications: Medication[];
-  diagnosis?: string;
+  diagnoses?: Diagnosis[];
   treatmentPlan?: string;
 };
 

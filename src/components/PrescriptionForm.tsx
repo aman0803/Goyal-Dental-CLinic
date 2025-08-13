@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, X, PlusCircle } from "lucide-react";
 
@@ -39,9 +39,14 @@ const medicationSchema = z.object({
     instructions: z.string().min(5, { message: "Instructions are required." }),
 });
 
+const diagnosisSchema = z.object({
+    toothNumber: z.string().optional(),
+    description: z.string().min(3, { message: "Description must be at least 3 characters." }),
+})
+
 const formSchema = z.object({
   patientName: z.string().min(1, { message: "Please select a patient." }),
-  diagnosis: z.string().optional(),
+  diagnoses: z.array(diagnosisSchema).optional(),
   treatmentPlan: z.string().optional(),
   medications: z.array(medicationSchema).min(1, { message: "At least one medication is required." }),
 });
@@ -122,15 +127,20 @@ export function PrescriptionForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       patientName: "",
-      diagnosis: "",
+      diagnoses: [{ toothNumber: "", description: "" }],
       treatmentPlan: "",
       medications: [{ name: "", dosage: "", instructions: "" }],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields: medicationFields, append: appendMedication, remove: removeMedication } = useFieldArray({
     control: form.control,
     name: "medications",
+  });
+  
+  const { fields: diagnosisFields, append: appendDiagnosis, remove: removeDiagnosis } = useFieldArray({
+    control: form.control,
+    name: "diagnoses",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -180,19 +190,64 @@ export function PrescriptionForm() {
           )}
         />
         
-        <FormField
-          control={form.control}
-          name="diagnosis"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Diagnosis (Optional)</FormLabel>
-              <FormControl>
-                <Textarea placeholder="e.g., Acute Pulpitis, Chronic Periodontitis..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+         <div>
+            <FormLabel>Diagnosis</FormLabel>
+            <div className="space-y-4 mt-2">
+                {diagnosisFields.map((field, index) => (
+                    <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
+                         <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute top-2 right-2"
+                            onClick={() => removeDiagnosis(index)}
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                        <div className="flex gap-4">
+                            <FormField
+                                control={form.control}
+                                name={`diagnoses.${index}.toothNumber`}
+                                render={({ field }) => (
+                                    <FormItem className="w-1/4">
+                                        <FormLabel>Tooth #</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., 14" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name={`diagnoses.${index}.description`}
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="e.g., Acute Pulpitis" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </div>
+                ))}
+                 <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => appendDiagnosis({ toothNumber: "", description: "" })}
+                    >
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add Diagnosis
+                </Button>
+                <FormMessage>{form.formState.errors.diagnoses?.root?.message}</FormMessage>
+            </div>
+        </div>
+
         
         <FormField
           control={form.control}
@@ -212,15 +267,15 @@ export function PrescriptionForm() {
         <div>
             <FormLabel>Medications</FormLabel>
             <div className="space-y-4 mt-2">
-                {fields.map((field, index) => (
+                {medicationFields.map((field, index) => (
                     <div key={field.id} className="p-4 border rounded-lg space-y-4 relative">
                          <Button
                             type="button"
                             variant="ghost"
                             size="sm"
                             className="absolute top-2 right-2"
-                            onClick={() => remove(index)}
-                            disabled={fields.length === 1}
+                            onClick={() => removeMedication(index)}
+                            disabled={medicationFields.length === 1}
                         >
                             <X className="h-4 w-4" />
                         </Button>
@@ -268,7 +323,7 @@ export function PrescriptionForm() {
                     variant="outline"
                     size="sm"
                     className="mt-2"
-                    onClick={() => append({ name: "", dosage: "", instructions: "" })}
+                    onClick={() => appendMedication({ name: "", dosage: "", instructions: "" })}
                     >
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Medication
