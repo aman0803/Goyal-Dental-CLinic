@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Stethoscope, Sparkles, HeartHandshake, Bone, Smile, Baby } from "lucide-react";
 import Image from "next/image";
 import { ToothIcon } from "@/components/icons";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const services = [
   {
@@ -63,6 +65,8 @@ const services = [
 
 export default function ServicesPage() {
   return (
+    <>
+    <Header />
     <div className="bg-background">
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4 md:px-6">
@@ -101,6 +105,7 @@ export default function ServicesPage() {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 }
-

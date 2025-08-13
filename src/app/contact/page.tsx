@@ -21,6 +21,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Phone, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -56,6 +58,8 @@ export default function ContactPage() {
   }
 
   return (
+    <>
+    <Header />
     <div className="bg-background">
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4 md:px-6">
@@ -162,6 +166,7 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 }
-

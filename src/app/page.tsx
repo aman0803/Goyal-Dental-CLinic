@@ -5,6 +5,8 @@ import { Stethoscope, Sparkles, HeartHandshake, ArrowRight } from "lucide-react"
 import Image from "next/image";
 import Link from "next/link";
 import { ToothIcon } from "@/components/icons";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   const services = [
@@ -30,6 +32,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-dvh">
+      <Header />
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-br from-background to-blue-100">
           <div className="container px-4 md:px-6">
@@ -164,6 +167,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

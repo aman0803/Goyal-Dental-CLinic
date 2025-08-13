@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import type { Appointment } from '@/lib/types';
 import { Search } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export default function CheckAppointmentPage() {
   const [phone, setPhone] = useState('');
@@ -36,6 +38,8 @@ export default function CheckAppointmentPage() {
   };
 
   return (
+    <>
+    <Header />
     <div className="bg-background py-12 md:py-20 lg:py-24">
       <div className="container mx-auto px-4 md:px-6">
         <Card className="max-w-3xl mx-auto shadow-lg">
@@ -104,5 +108,7 @@ export default function CheckAppointmentPage() {
         </Card>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

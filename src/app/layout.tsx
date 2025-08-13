@@ -3,8 +3,6 @@ import type { Metadata } from "next";
 import { PT_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/toaster";
 
 const ptSans = PT_Sans({
@@ -45,14 +43,9 @@ export default function RootLayout({
           ptSans.variable
         )}
       >
-        <div className="relative flex min-h-dvh flex-col bg-background">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
+        {children}
         <Toaster />
       </body>
     </html>
   );
 }
-

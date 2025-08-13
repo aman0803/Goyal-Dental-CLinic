@@ -1,8 +1,13 @@
 
+
 import FaqAssistant from "@/components/FaqAssistant";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export default function AssistantPage() {
   return (
+    <>
+    <Header />
     <div className="bg-background">
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4 md:px-6">
@@ -18,6 +23,7 @@ export default function AssistantPage() {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 }
-
