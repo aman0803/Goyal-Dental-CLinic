@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown, X, PlusCircle } from "lucide-react";
 
@@ -45,48 +45,53 @@ const formSchema = z.object({
 });
 
 const allMedicines = [
-    // Antibiotics
-    { value: 'amoxicillin', label: 'Amoxicillin' },
-    { value: 'clindamycin', label: 'Clindamycin' },
-    { value: 'penicillin-vk', label: 'Penicillin VK' },
-    { value: 'metronidazole', label: 'Metronidazole' },
-    { value: 'azithromycin', label: 'Azithromycin' },
-    { value: 'cephalexin', label: 'Cephalexin' },
-    { value: 'doxycycline', label: 'Doxycycline' },
-
-    // Analgesics (Pain Relievers)
-    { value: 'ibuprofen', label: 'Ibuprofen' },
-    { value: 'acetaminophen', label: 'Acetaminophen (Paracetamol)' },
-    { value: 'naproxen', label: 'Naproxen' },
-    { value: 'diclofenac', label: 'Diclofenac' },
-    { value: 'ketorolac', label: 'Ketorolac' },
+    { heading: "Analgesics (Pain Relievers)" },
+    { value: 'ibuprofen', label: 'Ibuprofen (Advil, Motrin)' },
+    { value: 'acetaminophen', label: 'Acetaminophen (Tylenol)' },
+    { value: 'naproxen', label: 'Naproxen (Aleve)' },
     { value: 'aspirin', label: 'Aspirin' },
-    { value: 'codeine-acetaminophen', label: 'Codeine/Acetaminophen' },
-
-    // Antiseptic Rinses
-    { value: 'chlorhexidine-gluconate', label: 'Chlorhexidine Gluconate Rinse' },
+    { value: 'diclofenac', label: 'Diclofenac' },
+    { value: 'ketorolac', label: 'Ketorolac (Toradol)' },
+    { value: 'codeine-acetaminophen', label: 'Codeine/Acetaminophen (Tylenol #3)' },
+    { value: 'hydrocodone-acetaminophen', label: 'Hydrocodone/Acetaminophen (Vicodin, Norco)' },
+    { value: 'oxycodone-acetaminophen', label: 'Oxycodone/Acetaminophen (Percocet)' },
+    { value: 'tramadol', label: 'Tramadol (Ultram)' },
+    { heading: "Antibiotics" },
+    { value: 'amoxicillin', label: 'Amoxicillin' },
+    { value: 'penicillin-vk', label: 'Penicillin VK' },
+    { value: 'clindamycin', label: 'Clindamycin' },
+    { value: 'metronidazole', label: 'Metronidazole' },
+    { value: 'azithromycin', label: 'Azithromycin (Z-Pak)' },
+    { value: 'cephalexin', label: 'Cephalexin (Keflex)' },
+    { value: 'doxycycline', label: 'Doxycycline' },
+    { value: 'erythromycin', label: 'Erythromycin' },
+    { heading: "Antiseptic Rinses" },
+    { value: 'chlorhexidine-gluconate', label: 'Chlorhexidine Gluconate Rinse (Peridex)' },
     { value: 'hydrogen-peroxide-rinse', label: 'Hydrogen Peroxide Rinse' },
-
-    // Steroids (for inflammation)
+    { value: 'listerine-antiseptic', label: 'Listerine Antiseptic' },
+    { heading: "Antifungals" },
+    { value: 'nystatin', label: 'Nystatin' },
+    { value: 'clotrimazole', label: 'Clotrimazole Troches' },
+    { value: 'fluconazole', label: 'Fluconazole (Diflucan)' },
+    { heading: "Antivirals" },
+    { value: 'acyclovir', label: 'Acyclovir (Zovirax)' },
+    { value: 'valacyclovir', label: 'Valacyclovir (Valtrex)' },
+    { value: 'penciclovir', label: 'Penciclovir (Denavir)' },
+    { heading: "Topical Anesthetics" },
+    { value: 'lidocaine-viscous', label: 'Lidocaine (Viscous)' },
+    { value: 'benzocaine', label: 'Benzocaine (Orajel)' },
+    { heading: "Corticosteroids" },
     { value: 'dexamethasone', label: 'Dexamethasone' },
     { value: 'prednisolone', label: 'Prednisolone' },
-
-    // Antifungals
-    { value: 'nystatin', label: 'Nystatin' },
-    { value: 'clotrimazole', label: 'Clotrimazole' },
-    { value: 'fluconazole', label: 'Fluconazole' },
-
-    // Antivirals
-    { value: 'acyclovir', label: 'Acyclovir' },
-    { value: 'valacyclovir', label: 'Valacyclovir' },
-
-    // Anesthetics (Topical)
-    { value: 'lidocaine-viscous', label: 'Lidocaine (Viscous)' },
-    { value: 'benzocaine', label: 'Benzocaine' },
-
-    // Fluoride Treatments
-    { value: 'sodium-fluoride-rinse', label: 'Sodium Fluoride Rinse' },
-    { value: 'stannous-fluoride-gel', label: 'Stannous Fluoride Gel' },
+    { value: 'triamcinolone-acetonide', label: 'Triamcinolone Acetonide (in Orabase)'},
+    { heading: "Fluoride Treatments" },
+    { value: 'sodium-fluoride-rinse', label: 'Sodium Fluoride Rinse (Phos-Flur)' },
+    { value: 'stannous-fluoride-gel', label: 'Stannous Fluoride Gel (Gel-Kam)' },
+    { value: 'prevident-5000', label: 'Prevident 5000 Plus' },
+    { heading: "Sedatives (for Anxiety)" },
+    { value: 'diazepam', label: 'Diazepam (Valium)' },
+    { value: 'triazolam', label: 'Triazolam (Halcion)' },
+    { value: 'lorazepam', label: 'Lorazepam (Ativan)' },
 ];
 
 
@@ -265,11 +270,14 @@ function MedicationCombobox({ field }: { field: any }) {
             <CommandEmpty>No medicine found.</CommandEmpty>
             <CommandGroup>
               {allMedicines.map((med) => (
+                med.heading ? (
+                    <div key={med.heading} className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{med.heading}</div>
+                ) : (
                 <CommandItem
                   key={med.value}
                   value={med.label}
                   onSelect={(currentValue) => {
-                    field.onChange(currentValue === field.value ? "" : allMedicines.find(m => m.label.toLowerCase() === currentValue.toLowerCase())?.label);
+                    field.onChange(currentValue === field.value ? "" : allMedicines.find(m => m.label?.toLowerCase() === currentValue.toLowerCase())?.label);
                     setOpen(false);
                   }}
                 >
@@ -281,6 +289,7 @@ function MedicationCombobox({ field }: { field: any }) {
                   />
                   {med.label}
                 </CommandItem>
+                )
               ))}
             </CommandGroup>
           </CommandList>
@@ -289,3 +298,5 @@ function MedicationCombobox({ field }: { field: any }) {
     </Popover>
   )
 }
+
+    
