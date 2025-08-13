@@ -4,27 +4,35 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ToothIcon } from "@/components/icons";
-import { Download, Printer } from "lucide-react";
-import type { Prescription } from "@/lib/types";
+import { Download, Printer, User } from "lucide-react";
+import type { Prescription, Patient } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-const getPrescriptionById = (id: string): Prescription | null => {
-    const storedPrescriptions = localStorage.getItem('prescriptions');
-    if (!storedPrescriptions) return null;
-    
-    const prescriptions: Prescription[] = JSON.parse(storedPrescriptions);
-    return prescriptions.find(p => p.id === id) || null;
-}
-
-
 export default function PrescriptionViewPage({ params }: { params: { id: string } }) {
     const [prescription, setPrescription] = useState<Prescription | null>(null);
+    const [patient, setPatient] = useState<Patient | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const foundPrescription = getPrescriptionById(params.id);
+        const storedPrescriptions = localStorage.getItem('prescriptions');
+        const storedPatients = localStorage.getItem('patients');
+        
+        if (!storedPrescriptions) {
+            setIsLoading(false);
+            return;
+        };
+        
+        const prescriptions: Prescription[] = JSON.parse(storedPrescriptions);
+        const foundPrescription = prescriptions.find(p => p.id === params.id) || null;
         setPrescription(foundPrescription);
+
+        if (foundPrescription && storedPatients) {
+            const patients: Patient[] = JSON.parse(storedPatients);
+            const foundPatient = patients.find(p => p.name === foundPrescription.patientName) || null;
+            setPatient(foundPatient);
+        }
+        
         setIsLoading(false);
     }, [params.id]);
 
@@ -83,6 +91,13 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                         </div>
                     </div>
 
+                    {patient?.medicalHistory && (
+                         <div className="border-b pb-4">
+                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-1">Medical History</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{patient.medicalHistory}</p>
+                      </div>
+                    )}
+
                     {prescription.diagnoses && prescription.diagnoses.length > 0 && (
                       <div className="border-b pb-4">
                           <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Diagnosis</p>
@@ -95,7 +110,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                                 </TableHeader>
                                 <TableBody>
                                     {prescription.diagnoses.map((d, i) => (
-                                    <TableRow key={i}>
+                                    d.description && <TableRow key={i}>
                                         <TableCell className="font-medium">{d.toothNumber || 'N/A'}</TableCell>
                                         <TableCell>{d.description}</TableCell>
                                     </TableRow>
@@ -159,4 +174,3 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
-
