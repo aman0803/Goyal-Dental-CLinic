@@ -65,7 +65,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                 <CardHeader className="bg-primary/10 border-b p-6">
                     <div className="flex justify-between items-start flex-wrap gap-4">
                         <div className="flex items-center gap-3">
-                            <ToothIcon className="h-10 w-10 text-primary" />
+                            <ToothIcon className="h-10 w-20 text-primary" />
                             <div>
                                 <h2 className="text-2xl font-bold font-headline">Goyal Dental Clinic</h2>
                                 <p className="text-md font-semibold text-muted-foreground">{prescription.doctorName}</p>

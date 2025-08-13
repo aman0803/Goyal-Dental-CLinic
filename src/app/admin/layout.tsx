@@ -87,7 +87,7 @@ export default function AdminLayout({
       <aside className="fixed hidden md:flex h-full w-64 flex-col border-r bg-white dark:bg-gray-800">
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
-            <ToothIcon className="h-6 w-6 text-primary" />
+            <ToothIcon className="h-6 w-12 text-primary" />
             <span>Goyal Dental Clinic</span>
           </Link>
         </div>
@@ -121,7 +121,7 @@ export default function AdminLayout({
       <div className="flex flex-1 flex-col md:pl-64">
         <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-white px-6 dark:bg-gray-800 md:hidden">
             <Link href="/" className="flex items-center gap-2 font-semibold">
-                <ToothIcon className="h-6 w-6 text-primary" />
+                <ToothIcon className="h-6 w-12 text-primary" />
                 <span>Admin</span>
             </Link>
         </header>

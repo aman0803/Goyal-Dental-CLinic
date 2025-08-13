@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
             <Link href="/" className="inline-flex items-center space-x-2">
-                <ToothIcon className="h-8 w-8 text-primary" />
+                <ToothIcon className="h-8 w-16 text-primary" />
                 <span className="text-2xl font-bold font-headline">Goyal Dental Clinic</span>
             </Link>
         </div>

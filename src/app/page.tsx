@@ -17,7 +17,7 @@ export default function Home() {
       link: "/services"
     },
     {
-      icon: <ToothIcon className="h-8 w-8 text-primary" />,
+      icon: <ToothIcon className="h-8 w-16 text-primary" />,
       title: "General Dentistry",
       description: "Comprehensive care including regular check-ups, cleanings, and fillings to maintain your oral health.",
       link: "/services"

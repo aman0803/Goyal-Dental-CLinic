@@ -26,7 +26,7 @@ const services = [
     }
   },
   {
-    icon: <ToothIcon className="h-10 w-10 text-primary" />,
+    icon: <ToothIcon className="h-10 w-20 text-primary" />,
     title: "General Dentistry",
     description: "Maintain your oral health with our comprehensive general dentistry services. This includes routine check-ups, professional cleanings, fillings, and preventive care for the whole family.",
     image: {

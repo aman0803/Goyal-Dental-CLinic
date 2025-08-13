@@ -37,7 +37,7 @@ export default function Header() {
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <ToothIcon className="h-6 w-6 text-primary" />
+            <ToothIcon className="h-6 w-12 text-primary" />
             <span className="hidden font-bold sm:inline-block font-headline">
               Goyal Dental Clinic
             </span>
@@ -70,7 +70,7 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent side="left">
                 <Link href="/" className="mr-6 flex items-center space-x-2 mb-6">
-                  <ToothIcon className="h-6 w-6 text-primary" />
+                  <ToothIcon className="h-6 w-12 text-primary" />
                   <span className="font-bold font-headline">Goyal Dental Clinic</span>
                 </Link>
                 <nav className="grid gap-y-6">
@@ -101,7 +101,7 @@ export default function Header() {
           </div>
           
           <Link href="/" className="flex items-center space-x-2 md:hidden">
-            <ToothIcon className="h-6 w-6 text-primary" />
+            <ToothIcon className="h-6 w-12 text-primary" />
             <span className="font-bold font-headline">Goyal Dental Clinic</span>
           </Link>
 
