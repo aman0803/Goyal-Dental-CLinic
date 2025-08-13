@@ -1,4 +1,5 @@
 
+
 export type Medication = {
   name: string;
   dosage: string;
@@ -30,3 +31,10 @@ export type Prescription = {
   date: string;
   medications: Medication[];
 };
+
+export type DayAvailability = {
+  day: string;
+  slots: string[];
+};
+
+export type DoctorAvailability = DayAvailability[];

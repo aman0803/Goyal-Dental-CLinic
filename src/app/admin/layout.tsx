@@ -9,7 +9,8 @@ import {
   Calendar,
   FileText,
   LogOut,
-  ChevronLeft
+  ChevronLeft,
+  CalendarClock
 } from "lucide-react";
 import { ToothIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,11 @@ const sidebarNavItems = [
     title: "Prescriptions",
     href: "/admin/prescriptions",
     icon: FileText,
+  },
+  {
+    title: "Availability",
+    href: "/admin/availability",
+    icon: CalendarClock,
   },
 ];
 

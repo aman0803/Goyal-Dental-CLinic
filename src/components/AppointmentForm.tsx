@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { format } from "date-fns";
+import { format, getDay } from "date-fns";
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { Appointment } from "@/lib/types";
+import type { Appointment, DoctorAvailability } from "@/lib/types";
+import { allTimeSlots } from "@/lib/constants";
 
-const allTimeSlots = [
-  "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
-  "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"
-];
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -39,15 +36,22 @@ const formSchema = z.object({
   reason: z.string().min(5, { message: "Please provide a brief reason for your visit." }),
 });
 
+const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 export function AppointmentForm() {
   const { toast } = useToast();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [availableTimeSlots, setAvailableTimeSlots] = useState(allTimeSlots);
+  const [doctorAvailability, setDoctorAvailability] = useState<DoctorAvailability | null>(null);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
 
   useEffect(() => {
     const storedAppointments = localStorage.getItem('appointments');
     if (storedAppointments) {
       setAppointments(JSON.parse(storedAppointments));
+    }
+    const storedAvailability = localStorage.getItem('doctorAvailability');
+    if (storedAvailability) {
+      setDoctorAvailability(JSON.parse(storedAvailability));
     }
   }, []);
 
@@ -63,17 +67,24 @@ export function AppointmentForm() {
   const handleDateChange = (date: Date | undefined) => {
     form.setValue('appointmentDate', date, { shouldValidate: true });
     form.setValue('appointmentTime', ''); // Reset time when date changes
+    
     if (date) {
+      // 1. Get doctor's general availability for the selected day of the week
+      const dayOfWeek = dayMap[getDay(date)];
+      const doctorsSlotsForDay = doctorAvailability?.find(d => d.day === dayOfWeek)?.slots || allTimeSlots;
+
+      // 2. Get already booked slots for the selected date
       const storedAppointments = localStorage.getItem('appointments');
       const allAppointments: Appointment[] = storedAppointments ? JSON.parse(storedAppointments) : [];
       const bookedSlots = allAppointments
         .filter(apt => new Date(apt.date).toDateString() === date.toDateString())
         .map(apt => apt.time);
       
-      const availableSlots = allTimeSlots.filter(slot => !bookedSlots.includes(slot));
+      // 3. Final available slots are doctor's slots minus booked slots
+      const availableSlots = doctorsSlotsForDay.filter(slot => !bookedSlots.includes(slot));
       setAvailableTimeSlots(availableSlots);
     } else {
-        setAvailableTimeSlots(allTimeSlots);
+        setAvailableTimeSlots([]);
     }
   }
 
@@ -191,7 +202,9 @@ export function AppointmentForm() {
                             {time}
                             </SelectItem>
                         )) : (
-                           <SelectItem value="none" disabled>No available slots</SelectItem>
+                           <SelectItem value="none" disabled>
+                            {!form.getValues('appointmentDate') ? 'Select date' : 'No available slots'}
+                           </SelectItem>
                         )}
                         </SelectContent>
                     </Select>
