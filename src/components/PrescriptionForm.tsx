@@ -45,17 +45,50 @@ const formSchema = z.object({
 });
 
 const allMedicines = [
+    // Antibiotics
     { value: 'amoxicillin', label: 'Amoxicillin' },
-    { value: 'ibuprofen', label: 'Ibuprofen' },
-    { value: 'paracetamol', label: 'Paracetamol' },
-    { value: 'chlorhexidine-mouthwash', label: 'Chlorhexidine Mouthwash' },
-    { value: 'azithromycin', label: 'Azithromycin' },
+    { value: 'clindamycin', label: 'Clindamycin' },
+    { value: 'penicillin-vk', label: 'Penicillin VK' },
     { value: 'metronidazole', label: 'Metronidazole' },
+    { value: 'azithromycin', label: 'Azithromycin' },
+    { value: 'cephalexin', label: 'Cephalexin' },
+    { value: 'doxycycline', label: 'Doxycycline' },
+
+    // Analgesics (Pain Relievers)
+    { value: 'ibuprofen', label: 'Ibuprofen' },
+    { value: 'acetaminophen', label: 'Acetaminophen (Paracetamol)' },
+    { value: 'naproxen', label: 'Naproxen' },
     { value: 'diclofenac', label: 'Diclofenac' },
     { value: 'ketorolac', label: 'Ketorolac' },
-    { value: 'clindamycin', label: 'Clindamycin' },
+    { value: 'aspirin', label: 'Aspirin' },
+    { value: 'codeine-acetaminophen', label: 'Codeine/Acetaminophen' },
+
+    // Antiseptic Rinses
+    { value: 'chlorhexidine-gluconate', label: 'Chlorhexidine Gluconate Rinse' },
+    { value: 'hydrogen-peroxide-rinse', label: 'Hydrogen Peroxide Rinse' },
+
+    // Steroids (for inflammation)
+    { value: 'dexamethasone', label: 'Dexamethasone' },
     { value: 'prednisolone', label: 'Prednisolone' },
-]
+
+    // Antifungals
+    { value: 'nystatin', label: 'Nystatin' },
+    { value: 'clotrimazole', label: 'Clotrimazole' },
+    { value: 'fluconazole', label: 'Fluconazole' },
+
+    // Antivirals
+    { value: 'acyclovir', label: 'Acyclovir' },
+    { value: 'valacyclovir', label: 'Valacyclovir' },
+
+    // Anesthetics (Topical)
+    { value: 'lidocaine-viscous', label: 'Lidocaine (Viscous)' },
+    { value: 'benzocaine', label: 'Benzocaine' },
+
+    // Fluoride Treatments
+    { value: 'sodium-fluoride-rinse', label: 'Sodium Fluoride Rinse' },
+    { value: 'stannous-fluoride-gel', label: 'Stannous Fluoride Gel' },
+];
+
 
 export function PrescriptionForm() {
   const { toast } = useToast();
