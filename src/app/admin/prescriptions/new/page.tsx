@@ -1,4 +1,5 @@
 
+
 import { PrescriptionForm } from "@/components/PrescriptionForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
@@ -9,7 +10,7 @@ export default function NewPrescriptionPage() {
     return (
         <div className="space-y-8">
             <div>
-                 <Button variant="ghost" asChild className="mb-4">
+                 <Button variant="ghost" asChild className="mb-4 -ml-4">
                     <Link href="/admin/prescriptions">
                         <ChevronLeft className="mr-2 h-4 w-4" />
                         Back to Prescriptions
@@ -32,4 +33,3 @@ export default function NewPrescriptionPage() {
         </div>
     )
 }
-

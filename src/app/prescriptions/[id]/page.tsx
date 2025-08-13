@@ -1,23 +1,18 @@
 
+
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ToothIcon } from "@/components/icons";
 import { Download, Printer } from "lucide-react";
 import type { Prescription } from "@/lib/types";
 
-// Mock data fetching function
+// Mock data fetching function - in a real app this would fetch from a database
 const getPrescriptionById = (id: string): Prescription | null => {
-    if (id === 'presc_1') {
-        return { 
-            id: 'presc_1', 
-            patientName: 'Priya Patel', 
-            doctorName: 'Dr. Sushil Goyal', 
-            date: '2024-08-01', 
-            medication: 'Amoxicillin', 
-            dosage: '500mg', 
-            instructions: 'Take one tablet twice a day for 7 days after meals. Complete the full course.'
-        };
-    }
+    // This is just a placeholder. In a real app you would have a list of prescriptions
+    // and find the one with the matching id. Since we cleared mock data, this will
+    // likely not find anything unless you add a prescription first.
     return null;
 }
 
@@ -30,7 +25,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
              <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 text-center">
                 <Card className="w-full max-w-md p-8">
                     <h1 className="text-2xl font-bold text-destructive mb-4">Prescription Not Found</h1>
-                    <p className="text-muted-foreground">The prescription you are looking for does not exist or the link is invalid.</p>
+                    <p className="text-muted-foreground">The prescription you are looking for does not exist, the link is invalid, or it has not been created yet.</p>
                 </Card>
             </div>
         );
@@ -70,14 +65,15 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                     </div>
                    
                     <div className="space-y-4">
-                        <p className="text-sm font-semibold text-muted-foreground">Rx (Medication)</p>
-                        <div>
-                            <p className="text-2xl font-bold text-primary">{prescription.medication}</p>
-                            <p className="text-lg font-semibold text-muted-foreground">{prescription.dosage}</p>
-                        </div>
-                        <div>
-                            <p className="font-semibold">Instructions:</p>
-                            <p className="text-muted-foreground text-base p-4 border bg-gray-50 rounded-md">{prescription.instructions}</p>
+                        <p className="text-sm font-semibold text-muted-foreground uppercase">Rx (Medications)</p>
+                        <div className="space-y-4">
+                            {prescription.medications.map((med, index) => (
+                                <div key={index} className="border-b pb-3 last:border-b-0">
+                                    <p className="text-xl font-bold text-primary">{med.name}</p>
+                                    <p className="text-md font-semibold text-muted-foreground">{med.dosage}</p>
+                                    <p className="mt-1 text-sm text-gray-600">{med.instructions}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     

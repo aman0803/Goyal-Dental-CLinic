@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -6,19 +8,42 @@ import type { Appointment } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ListFilter } from "lucide-react";
-
-const allAppointments: Appointment[] = [
-    { id: '1', patientName: 'Aarav Sharma', date: '2024-08-01', time: '10:00 AM', reason: 'Regular Check-up', status: 'Confirmed' },
-    { id: '2', patientName: 'Priya Patel', date: '2024-08-01', time: '11:30 AM', reason: 'Tooth Pain', status: 'Confirmed' },
-    { id: '3', patientName: 'Rohan Mehta', date: '2024-08-01', time: '02:00 PM', reason: 'Cleaning', status: 'Pending' },
-    { id: '4', patientName: 'Saanvi Gupta', date: '2024-08-02', time: '09:00 AM', reason: 'Braces Adjustment', status: 'Confirmed' },
-    { id: '5', patientName: 'Vivaan Singh', date: '2024-08-02', time: '03:00 PM', reason: 'New Patient Consultation', status: 'Cancelled' },
-    { id: '6', patientName: 'Diya Joshi', date: '2024-08-03', time: '10:30 AM', reason: 'Filling', status: 'Confirmed' },
-    { id: '7', patientName: 'Kabir Kumar', date: '2024-08-03', time: '12:00 PM', reason: 'Wisdom Tooth Extraction', status: 'Confirmed' },
-];
+import { ListFilter, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export default function AdminAppointmentsPage() {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilters, setStatusFilters] = useState<string[]>(['Confirmed', 'Pending', 'Cancelled']);
+
+  const handleFilterChange = (status: string) => {
+    setStatusFilters(prev => 
+      prev.includes(status) 
+        ? prev.filter(s => s !== status) 
+        : [...prev, status]
+    );
+  };
+
+  const filteredAppointments = appointments
+    .filter(apt => statusFilters.includes(apt.status))
+    .filter(apt => apt.patientName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const deleteAppointment = (id: string) => {
+    setAppointments(prev => prev.filter(apt => apt.id !== id));
+  };
+
+
   return (
     <div className="space-y-8">
       <div>
@@ -28,11 +53,16 @@ export default function AdminAppointmentsPage() {
       
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-4">
-            <Input placeholder="Search by patient name..." className="max-w-sm" />
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Input 
+              placeholder="Search by patient name..." 
+              className="max-w-sm" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-10 gap-1">
+                <Button variant="outline" className="h-10 gap-1 w-full sm:w-auto">
                   <ListFilter className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Filter
@@ -42,49 +72,74 @@ export default function AdminAppointmentsPage() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem checked>
+                <DropdownMenuCheckboxItem checked={statusFilters.includes('Confirmed')} onCheckedChange={() => handleFilterChange('Confirmed')}>
                   Confirmed
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem>Pending</DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem>Cancelled</DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked={statusFilters.includes('Pending')} onCheckedChange={() => handleFilterChange('Pending')}>
+                  Pending
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked={statusFilters.includes('Cancelled')} onCheckedChange={() => handleFilterChange('Cancelled')}>
+                  Cancelled
+                </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Patient</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allAppointments.map((apt) => (
-                <TableRow key={apt.id}>
-                  <TableCell className="font-medium">{apt.patientName}</TableCell>
-                  <TableCell>{apt.date}</TableCell>
-                  <TableCell>{apt.time}</TableCell>
-                  <TableCell>{apt.reason}</TableCell>
-                  <TableCell>
-                    <Badge variant={apt.status === 'Confirmed' ? 'default' : apt.status === 'Pending' ? 'secondary' : 'destructive'}>
-                        {apt.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm">Details</Button>
-                  </TableCell>
+           <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient</TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="hidden md:table-cell">Time</TableHead>
+                  <TableHead>Reason</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredAppointments.length > 0 ? filteredAppointments.map((apt) => (
+                  <TableRow key={apt.id}>
+                    <TableCell className="font-medium">{apt.patientName}</TableCell>
+                    <TableCell className="hidden md:table-cell">{apt.date}</TableCell>
+                    <TableCell className="hidden md:table-cell">{apt.time}</TableCell>
+                    <TableCell>{apt.reason}</TableCell>
+                    <TableCell>
+                      <Badge variant={apt.status === 'Confirmed' ? 'default' : apt.status === 'Pending' ? 'secondary' : 'destructive'}>
+                          {apt.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                           <Button variant="destructive" size="sm">Delete</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete the appointment.
+                            </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => deleteAppointment(apt.id)}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                        </AlertDialog>
+                    </TableCell>
+                  </TableRow>
+                )) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center h-24">No appointments found.</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
-

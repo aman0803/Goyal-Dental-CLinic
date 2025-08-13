@@ -1,22 +1,26 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Prescription } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilePlus, Download } from "lucide-react";
+import { FilePlus, Download, Eye } from "lucide-react";
 import Link from "next/link";
-
-const allPrescriptions: Prescription[] = [
-    { id: 'presc_1', patientName: 'Priya Patel', doctorName: 'Dr. Sushil Goyal', date: '2024-08-01', medication: 'Amoxicillin', dosage: '500mg', instructions: 'Take one tablet twice a day for 7 days.'},
-    { id: 'presc_2', patientName: 'Rohan Mehta', doctorName: 'Dr. Manju Goyal', date: '2024-07-28', medication: 'Ibuprofen', dosage: '400mg', instructions: 'Take as needed for pain, max 3 per day.'},
-    { id: 'presc_3', patientName: 'Aarav Sharma', doctorName: 'Dr. Sushil Goyal', date: '2024-07-25', medication: 'Chlorhexidine Mouthwash', dosage: '15ml', instructions: 'Rinse twice daily after brushing.'},
-];
+import { useState } from "react";
 
 export default function AdminPrescriptionsPage() {
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredPrescriptions = prescriptions.filter(p =>
+    p.patientName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Prescriptions</h1>
                 <p className="text-muted-foreground">Manage all patient prescriptions.</p>
@@ -31,42 +35,53 @@ export default function AdminPrescriptionsPage() {
       
       <Card>
         <CardHeader>
-            <Input placeholder="Search by patient name..." className="max-w-sm" />
+            <Input 
+              placeholder="Search by patient name..." 
+              className="max-w-sm"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Patient</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Medication</TableHead>
-                <TableHead>Doctor</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allPrescriptions.map((p) => (
-                <TableRow key={p.id}>
-                  <TableCell className="font-medium">{p.patientName}</TableCell>
-                  <TableCell>{p.date}</TableCell>
-                  <TableCell>{p.medication}</TableCell>
-                  <TableCell>{p.doctorName}</TableCell>
-                  <TableCell className="space-x-2">
-                    <Button variant="outline" size="sm" asChild>
-                        <Link href={`/prescriptions/${p.id}`}>View</Link>
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        <Download className="mr-2 h-3 w-3" />
-                        Download
-                    </Button>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+                <TableHeader>
+                <TableRow>
+                    <TableHead>Patient</TableHead>
+                    <TableHead className="hidden sm:table-cell">Date</TableHead>
+                    <TableHead>Medications</TableHead>
+                    <TableHead className="hidden md:table-cell">Doctor</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                </TableHeader>
+                <TableBody>
+                {filteredPrescriptions.length > 0 ? filteredPrescriptions.map((p) => (
+                    <TableRow key={p.id}>
+                    <TableCell className="font-medium">{p.patientName}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{p.date}</TableCell>
+                    <TableCell>{p.medications.map(m => m.name).join(', ')}</TableCell>
+                    <TableCell className="hidden md:table-cell">{p.doctorName}</TableCell>
+                    <TableCell className="text-right space-x-2">
+                        <Button variant="outline" size="sm" asChild>
+                            <Link href={`/prescriptions/${p.id}`}><Eye className="h-4 w-4" /></Link>
+                        </Button>
+                        <Button variant="outline" size="sm">
+                            <Download className="h-4 w-4" />
+                        </Button>
+                    </TableCell>
+                    </TableRow>
+                )) : (
+                     <TableRow>
+                        <TableCell colSpan={5} className="h-24 text-center">
+                            No prescriptions found.
+                        </TableCell>
+                    </TableRow>
+                )}
+                </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
-

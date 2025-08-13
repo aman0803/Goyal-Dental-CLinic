@@ -1,4 +1,10 @@
 
+export type Medication = {
+  name: string;
+  dosage: string;
+  instructions: string;
+}
+
 export type Appointment = {
   id: string;
   patientName: string;
@@ -21,8 +27,5 @@ export type Prescription = {
   patientName: string;
   doctorName: string;
   date: string;
-  medication: string;
-  dosage: string;
-  instructions: string;
+  medications: Medication[];
 };
-

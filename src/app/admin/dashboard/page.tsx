@@ -1,21 +1,19 @@
 
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, Calendar, FileText, ArrowUp, Activity } from "lucide-react";
+import { Users, Calendar, FileText, Activity } from "lucide-react";
 import type { Appointment } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-
-const recentAppointments: Appointment[] = [
-    { id: '1', patientName: 'Aarav Sharma', date: '2024-08-01', time: '10:00 AM', reason: 'Regular Check-up', status: 'Confirmed' },
-    { id: '2', patientName: 'Priya Patel', date: '2024-08-01', time: '11:30 AM', reason: 'Tooth Pain', status: 'Confirmed' },
-    { id: '3', patientName: 'Rohan Mehta', date: '2024-08-01', time: '02:00 PM', reason: 'Cleaning', status: 'Pending' },
-    { id: '4', patientName: 'Saanvi Gupta', date: '2024-08-02', time: '09:00 AM', reason: 'Braces Adjustment', status: 'Confirmed' },
-];
+import { useState } from "react";
 
 export default function AdminDashboardPage() {
+  const [recentAppointments, setRecentAppointments] = useState<Appointment[]>([]);
+
   return (
     <div className="space-y-8">
       <div>
@@ -30,8 +28,8 @@ export default function AdminDashboardPage() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">+2 since yesterday</p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">No appointments today</p>
           </CardContent>
         </Card>
         <Card>
@@ -40,8 +38,8 @@ export default function AdminDashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+45</div>
-            <p className="text-xs text-muted-foreground">+10% from last month</p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">No new patients this month</p>
           </CardContent>
         </Card>
         <Card>
@@ -50,8 +48,8 @@ export default function AdminDashboardPage() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
-            <p className="text-xs text-muted-foreground">+3 today</p>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">No prescriptions today</p>
           </CardContent>
         </Card>
         <Card>
@@ -60,7 +58,7 @@ export default function AdminDashboardPage() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">High</div>
+            <div className="text-2xl font-bold">Low</div>
             <p className="text-xs text-muted-foreground">Based on recent bookings</p>
           </CardContent>
         </Card>
@@ -79,35 +77,40 @@ export default function AdminDashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Patient</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentAppointments.map((apt) => (
-                <TableRow key={apt.id}>
-                  <TableCell className="font-medium">{apt.patientName}</TableCell>
-                  <TableCell>{apt.date}</TableCell>
-                  <TableCell>{apt.time}</TableCell>
-                  <TableCell>{apt.reason}</TableCell>
-                  <TableCell>
-                    <Badge variant={apt.status === 'Confirmed' ? 'default' : apt.status === 'Pending' ? 'secondary' : 'destructive'}>
-                        {apt.status}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+            <div className="overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                    <TableRow>
+                        <TableHead>Patient</TableHead>
+                        <TableHead className="hidden md:table-cell">Date</TableHead>
+                        <TableHead className="hidden md:table-cell">Time</TableHead>
+                        <TableHead>Reason</TableHead>
+                        <TableHead>Status</TableHead>
+                    </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                    {recentAppointments.length > 0 ? recentAppointments.map((apt) => (
+                        <TableRow key={apt.id}>
+                        <TableCell className="font-medium">{apt.patientName}</TableCell>
+                        <TableCell className="hidden md:table-cell">{apt.date}</TableCell>
+                        <TableCell className="hidden md:table-cell">{apt.time}</TableCell>
+                        <TableCell>{apt.reason}</TableCell>
+                        <TableCell>
+                            <Badge variant={apt.status === 'Confirmed' ? 'default' : apt.status === 'Pending' ? 'secondary' : 'destructive'}>
+                                {apt.status}
+                            </Badge>
+                        </TableCell>
+                        </TableRow>
+                    )) : (
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center h-24">No recent appointments.</TableCell>
+                        </TableRow>
+                    )}
+                    </TableBody>
+                </Table>
+            </div>
         </CardContent>
       </Card>
     </div>
   );
 }
-
