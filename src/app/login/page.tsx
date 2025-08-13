@@ -12,6 +12,7 @@ export default function AdminLoginPage() {
     const router = useRouter();
 
     useEffect(() => {
+        // If the user is already authenticated, redirect them to the dashboard.
         if (sessionStorage.getItem("isAuthenticated") === "true") {
             router.replace('/admin/dashboard');
         }

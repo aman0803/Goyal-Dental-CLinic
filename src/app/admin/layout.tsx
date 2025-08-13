@@ -54,6 +54,7 @@ export default function AdminLayout({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
+    // This check runs on the client-side
     const authStatus = sessionStorage.getItem("isAuthenticated") === "true";
     setIsAuthenticated(authStatus);
     if (!authStatus) {
@@ -66,6 +67,7 @@ export default function AdminLayout({
     router.push('/login');
   };
 
+  // While checking authentication, show a loading state
   if (isAuthenticated === null) {
       return (
         <div className="flex min-h-screen items-center justify-center">
@@ -74,6 +76,8 @@ export default function AdminLayout({
       );
   }
 
+  // If not authenticated, the useEffect above will have already started the redirect.
+  // Returning null here prevents a flash of un-styled content.
   if (!isAuthenticated) {
       return null;
   }
