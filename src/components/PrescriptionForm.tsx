@@ -41,6 +41,8 @@ const medicationSchema = z.object({
 
 const formSchema = z.object({
   patientName: z.string().min(1, { message: "Please select a patient." }),
+  diagnosis: z.string().optional(),
+  treatmentPlan: z.string().optional(),
   medications: z.array(medicationSchema).min(1, { message: "At least one medication is required." }),
 });
 
@@ -120,6 +122,8 @@ export function PrescriptionForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       patientName: "",
+      diagnosis: "",
+      treatmentPlan: "",
       medications: [{ name: "", dosage: "", instructions: "" }],
     },
   });
@@ -175,6 +179,35 @@ export function PrescriptionForm() {
             </FormItem>
           )}
         />
+        
+        <FormField
+          control={form.control}
+          name="diagnosis"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Diagnosis (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Acute Pulpitis, Chronic Periodontitis..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="treatmentPlan"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Plan of Treatment (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Root Canal Treatment on #14, Scaling and Root Planing..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
 
         <div>
             <FormLabel>Medications</FormLabel>

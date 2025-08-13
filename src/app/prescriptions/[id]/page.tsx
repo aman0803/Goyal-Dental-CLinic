@@ -83,6 +83,20 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                             <p className="font-semibold">{prescription.date}</p>
                         </div>
                     </div>
+
+                    {prescription.diagnosis && (
+                      <div className="border-b pb-4">
+                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-1">Diagnosis</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{prescription.diagnosis}</p>
+                      </div>
+                    )}
+                    
+                    {prescription.treatmentPlan && (
+                       <div className="border-b pb-4">
+                          <p className="text-sm font-semibold text-muted-foreground uppercase mb-1">Treatment Plan</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{prescription.treatmentPlan}</p>
+                      </div>
+                    )}
                    
                     <div>
                         <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Rx (Medications)</p>
