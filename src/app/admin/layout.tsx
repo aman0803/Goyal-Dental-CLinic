@@ -46,31 +46,38 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const authStatus = sessionStorage.getItem("isAuthenticated") === 'true';
-    setIsAuthenticated(authStatus);
-    if (!authStatus) {
-      router.replace("/admin/login");
-    } else {
-      setIsLoading(false);
+    try {
+      const authStatus = sessionStorage.getItem("isAuthenticated") === 'true';
+      setIsAuthenticated(authStatus);
+      if (!authStatus) {
+        router.replace("/login");
+      }
+    } catch (e) {
+      // sessionStorage is not available
+      setIsAuthenticated(false);
+      router.replace("/login");
     }
   }, [router]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
-    router.push('/admin/login');
+    router.push('/login');
   };
   
-  if (isLoading) {
+  if (isAuthenticated === null) {
     return (
         <div className="flex items-center justify-center min-h-screen">
             <p>Loading...</p>
         </div>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null; // or a redirect component
   }
 
   return (

@@ -1,10 +1,22 @@
 
+'use client';
+
 import { LoginForm } from "@/components/LoginForm";
 import { ToothIcon } from "@/components/icons";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
 
 export default function AdminLoginPage() {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (sessionStorage.getItem("isAuthenticated") === "true") {
+            router.replace('/admin/dashboard');
+        }
+    }, [router]);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-md">

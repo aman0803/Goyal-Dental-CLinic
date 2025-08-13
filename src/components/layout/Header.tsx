@@ -91,7 +91,7 @@ export default function Header() {
               <Link href="/book-appointment">Book Appointment</Link>
             </Button>
             <Button asChild variant="ghost" size="icon" aria-label="Admin Login">
-              <Link href="/admin/login">
+              <Link href="/login">
                 <BriefcaseMedical className="h-5 w-5" />
               </Link>
             </Button>
@@ -101,4 +101,3 @@ export default function Header() {
     </header>
   );
 }
-
