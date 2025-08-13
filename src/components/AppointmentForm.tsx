@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { format } from "date-fns";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -21,11 +22,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Appointment } from "@/lib/types";
 
-const availableTimeSlots = [
+const allTimeSlots = [
   "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
   "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM"
 ];
@@ -40,6 +41,15 @@ const formSchema = z.object({
 
 export function AppointmentForm() {
   const { toast } = useToast();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [availableTimeSlots, setAvailableTimeSlots] = useState(allTimeSlots);
+
+  useEffect(() => {
+    const storedAppointments = localStorage.getItem('appointments');
+    if (storedAppointments) {
+      setAppointments(JSON.parse(storedAppointments));
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,27 +60,28 @@ export function AppointmentForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const storedAppointments = localStorage.getItem('appointments');
-    const appointments: Appointment[] = storedAppointments ? JSON.parse(storedAppointments) : [];
-
-    const isSlotTaken = appointments.some(apt => 
-        new Date(apt.date).toDateString() === values.appointmentDate.toDateString() &&
-        apt.time === values.appointmentTime
-    );
-
-    if (isSlotTaken) {
-        toast({
-            title: "Booking Failed",
-            description: "The selected date and time slot is already booked. Please choose another slot.",
-            variant: "destructive",
-        });
-        return;
+  const handleDateChange = (date: Date | undefined) => {
+    form.setValue('appointmentDate', date, { shouldValidate: true });
+    form.setValue('appointmentTime', ''); // Reset time when date changes
+    if (date) {
+      const storedAppointments = localStorage.getItem('appointments');
+      const allAppointments: Appointment[] = storedAppointments ? JSON.parse(storedAppointments) : [];
+      const bookedSlots = allAppointments
+        .filter(apt => new Date(apt.date).toDateString() === date.toDateString())
+        .map(apt => apt.time);
+      
+      const availableSlots = allTimeSlots.filter(slot => !bookedSlots.includes(slot));
+      setAvailableTimeSlots(availableSlots);
+    } else {
+        setAvailableTimeSlots(allTimeSlots);
     }
+  }
 
+  function onSubmit(values: z.infer<typeof formSchema>) {
     const newAppointment: Appointment = {
       id: new Date().getTime().toString(),
       patientName: values.name,
+      phone: values.phone,
       date: values.appointmentDate.toISOString(),
       time: values.appointmentTime,
       reason: values.reason,
@@ -79,12 +90,16 @@ export function AppointmentForm() {
 
     const updatedAppointments = [...appointments, newAppointment];
     localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    setAppointments(updatedAppointments); // Update state to reflect new booking
+    handleDateChange(values.appointmentDate); // Re-calculate available slots for the same day
 
     toast({
       title: "Appointment Request Sent",
       description: `Thank you, ${values.name}. We have received your request for ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime}. We will contact you shortly to confirm.`,
     });
-    form.reset();
+    form.reset({ name: "", phone: "", reason: "" });
+    form.setValue('appointmentDate', undefined);
+    form.setValue('appointmentTime', undefined);
   }
 
   return (
@@ -146,7 +161,7 @@ export function AppointmentForm() {
                     <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={handleDateChange}
                         disabled={(date) =>
                         date < new Date(new Date().setHours(0,0,0,0)) || date.getDay() === 0 // Disable past dates and Sundays
                         }
@@ -164,18 +179,20 @@ export function AppointmentForm() {
             render={({ field }) => (
                 <FormItem>
                     <FormLabel>Preferred Time</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={!form.getValues('appointmentDate')}>
                         <FormControl>
                         <SelectTrigger>
-                            <SelectValue placeholder="Select a time slot" />
+                            <SelectValue placeholder={!form.getValues('appointmentDate') ? 'Select a date first' : 'Select a time slot'} />
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                        {availableTimeSlots.map(time => (
+                        {availableTimeSlots.length > 0 ? availableTimeSlots.map(time => (
                             <SelectItem key={time} value={time}>
                             {time}
                             </SelectItem>
-                        ))}
+                        )) : (
+                           <SelectItem value="none" disabled>No available slots</SelectItem>
+                        )}
                         </SelectContent>
                     </Select>
                     <FormMessage />

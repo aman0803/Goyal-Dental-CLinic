@@ -119,6 +119,7 @@ export default function AdminAppointmentsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Patient</TableHead>
+                  <TableHead className="hidden lg:table-cell">Phone</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
                   <TableHead className="hidden md:table-cell">Time</TableHead>
                   <TableHead>Reason</TableHead>
@@ -130,6 +131,7 @@ export default function AdminAppointmentsPage() {
                 {filteredAppointments.length > 0 ? filteredAppointments.map((apt) => (
                   <TableRow key={apt.id}>
                     <TableCell className="font-medium">{apt.patientName}</TableCell>
+                    <TableCell className="hidden lg:table-cell">{apt.phone}</TableCell>
                     <TableCell className="hidden md:table-cell">{new Date(apt.date).toLocaleDateString()}</TableCell>
                     <TableCell className="hidden md:table-cell">{apt.time}</TableCell>
                     <TableCell>{apt.reason}</TableCell>
@@ -175,7 +177,7 @@ export default function AdminAppointmentsPage() {
                   </TableRow>
                 )) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center h-24">No appointments found.</TableCell>
+                    <TableCell colSpan={7} className="text-center h-24">No appointments found.</TableCell>
                   </TableRow>
                 )}
               </TableBody>

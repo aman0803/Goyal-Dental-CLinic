@@ -8,6 +8,7 @@ export type Medication = {
 export type Appointment = {
   id: string;
   patientName: string;
+  phone: string;
   date: string;
   time: string;
   reason: string;

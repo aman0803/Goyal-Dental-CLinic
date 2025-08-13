@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, User, BriefcaseMedical } from "lucide-react";
+import { Menu, User, BriefcaseMedical, CalendarCheck } from "lucide-react";
 import { ToothIcon } from "../icons";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -46,6 +46,16 @@ export default function Header() {
             {navLinks.map((link) => (
               <NavLink key={link.href} {...link} />
             ))}
+             <Link
+                href="/check-appointment"
+                className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1",
+                    pathname === "/check-appointment" ? "text-primary" : "text-muted-foreground"
+                )}
+                >
+                <CalendarCheck className="h-4 w-4" />
+                Check Status
+            </Link>
           </nav>
         </div>
 
@@ -76,6 +86,15 @@ export default function Header() {
                      {link.label}
                    </Link>
                   ))}
+                   <Link
+                    href="/check-appointment"
+                    className={cn(
+                        "flex items-center text-lg font-medium transition-colors hover:text-primary",
+                        pathname === "/check-appointment" ? "text-primary" : "text-muted-foreground"
+                    )}
+                    >
+                    Check Status
+                    </Link>
                 </nav>
               </SheetContent>
             </Sheet>
