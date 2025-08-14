@@ -548,15 +548,13 @@ function MedicationCombobox({ field }: { field: any }) {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {field.value
-            ? allMedicines.find((med) => med.label === field.value)?.label
-            : "Select medicine..."}
+          {field.value || "Select or type medicine..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-        <Command>
-          <CommandInput placeholder="Search medicine..." />
+        <Command onValueChange={field.onChange} shouldFilter={false}>
+          <CommandInput placeholder="Search or type medicine..." onValueChange={field.onChange} value={field.value} />
           <CommandList>
             <CommandEmpty>No medicine found.</CommandEmpty>
             <CommandGroup>
@@ -568,14 +566,15 @@ function MedicationCombobox({ field }: { field: any }) {
                   key={med.value}
                   value={med.label}
                   onSelect={(currentValue) => {
-                    field.onChange(currentValue === field.value ? "" : allMedicines.find(m => m.label?.toLowerCase() === currentValue.toLowerCase())?.label);
+                    const label = allMedicines.find(m => m.label?.toLowerCase() === currentValue.toLowerCase())?.label;
+                    field.onChange(label);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      field.value === med.label ? "opacity-100" : "opacity-0"
+                      field.value?.toLowerCase() === med.label?.toLowerCase() ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {med.label}
