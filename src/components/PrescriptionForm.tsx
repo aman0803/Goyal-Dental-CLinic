@@ -60,6 +60,7 @@ const allMedicines = [
     { value: "diclofenac-potassium", label: "Diclofenac potassium" },
     { value: "ketorolac-tromethamine", label: "Ketorolac tromethamine" },
     { value: "etoricoxib", label: "Etoricoxib" },
+    { value: "etodolac", label: "Etodolac" },
     { value: "aceclofenac", label: "Aceclofenac" },
     { value: "aceclofenac-paracetamol", label: "Aceclofenac + Paracetamol" },
     { value: "aceclofenac-paracetamol-serratiopeptidase", label: "Aceclofenac + Paracetamol + Serratiopeptidase" },
@@ -86,6 +87,8 @@ const allMedicines = [
     { value: "benzathine-penicillin-g", label: "Benzathine penicillin G" },
     { value: "metronidazole", label: "Metronidazole" },
     { value: "tinidazole", label: "Tinidazole" },
+    { value: "ornidazole", label: "Ornidazole" },
+    { value: "ofloxacin-ornidazole", label: "Ofloxacin + Ornidazole" },
     { value: "azithromycin", label: "Azithromycin" },
     { value: "roxithromycin", label: "Roxithromycin" },
     { value: "clarithromycin", label: "Clarithromycin" },
@@ -123,6 +126,12 @@ const allMedicines = [
     { value: "hydrocortisone", label: "Hydrocortisone" },
     { value: "triamcinolone-acetonide", label: "Triamcinolone acetonide" },
     { value: "betamethasone", label: "Betamethasone" },
+    { heading: "Enzymes" },
+    { value: "serratiopeptidase", label: "Serratiopeptidase" },
+    { value: "trypsin-chymotrypsin", label: "Trypsin-Chymotrypsin" },
+    { heading: "Muscle Relaxants" },
+    { value: "chlorzoxazone", label: "Chlorzoxazone" },
+    { value: "diclofenac-chlorzoxazone", label: "Diclofenac + Paracetamol + Chlorzoxazone" },
     { heading: "Antifungals" },
     { value: "nystatin-oral-suspension", label: "Nystatin oral suspension" },
     { value: "clotrimazole-mouth-paint", label: "Clotrimazole mouth paint / lozenges" },
@@ -580,3 +589,5 @@ function MedicationCombobox({ field }: { field: any }) {
     </Popover>
   )
 }
+
+    
