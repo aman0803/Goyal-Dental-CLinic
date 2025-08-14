@@ -537,7 +537,8 @@ export function PrescriptionForm() {
 
 
 function MedicationCombobox({ field }: { field: any }) {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState(field.value || "");
 
     return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -553,21 +554,23 @@ function MedicationCombobox({ field }: { field: any }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-        <Command onValueChange={field.onChange} shouldFilter={false}>
-          <CommandInput placeholder="Search or type medicine..." onValueChange={field.onChange} value={field.value} />
+        <Command>
+          <CommandInput 
+            placeholder="Search or type medicine..." 
+            value={inputValue}
+            onValueChange={setInputValue}
+          />
           <CommandList>
             <CommandEmpty>No medicine found.</CommandEmpty>
             <CommandGroup>
-              {allMedicines.map((med) => (
-                med.heading ? (
-                    <div key={med.heading} className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{med.heading}</div>
-                ) : (
+              {allMedicines.filter(med => !med.heading && med.label?.toLowerCase().includes(inputValue.toLowerCase())).map((med) => (
                 <CommandItem
                   key={med.value}
                   value={med.label}
                   onSelect={(currentValue) => {
-                    const label = allMedicines.find(m => m.label?.toLowerCase() === currentValue.toLowerCase())?.label;
+                    const label = allMedicines.find(m => m.label?.toLowerCase() === currentValue.toLowerCase())?.label || currentValue;
                     field.onChange(label);
+                    setInputValue(label);
                     setOpen(false);
                   }}
                 >
@@ -579,14 +582,20 @@ function MedicationCombobox({ field }: { field: any }) {
                   />
                   {med.label}
                 </CommandItem>
-                )
               ))}
             </CommandGroup>
+             <CommandItem
+                onSelect={() => {
+                  field.onChange(inputValue);
+                  setOpen(false);
+                }}
+                className="[&[data-selected]]:bg-accent [&[data-selected]]:text-accent-foreground]"
+              >
+                Add "{inputValue}"
+              </CommandItem>
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
   )
 }
-
-    
