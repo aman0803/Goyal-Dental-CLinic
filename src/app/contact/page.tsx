@@ -20,7 +20,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Phone, MapPin } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -52,6 +51,8 @@ export default function ContactPage() {
     });
     form.reset();
   }
+
+  const mapSrc = "https://maps.google.com/maps?q=Goyal%20Dental%20Clinic%2C%20Bikaner%20road%2C%20near%20Allahabad%2FIndian%20Bank%20335804%2C%20Suratgarh%2C%20Rajasthan&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
   return (
     <>
@@ -129,14 +130,18 @@ export default function ContactPage() {
                         </li>
                     </ul>
                 </Card>
-                 <Image
-                    src="https://placehold.co/600x300.png"
-                    data-ai-hint="dental tools"
-                    width={600}
-                    height={300}
-                    alt="Clinic Details"
-                    className="rounded-lg shadow-lg object-cover"
-                />
+                 <div className="rounded-lg shadow-lg overflow-hidden">
+                    <iframe
+                        src={mapSrc}
+                        width="100%"
+                        height="300"
+                        style={{ border: 0 }}
+                        allowFullScreen={false}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Goyal Dental Clinic Location"
+                    ></iframe>
+                </div>
             </div>
           </div>
         </div>
