@@ -153,6 +153,7 @@ export function PrescriptionForm() {
         id: new Date().getTime().toString(),
         ...values,
         doctorName: "Dr. Sushil Kumar Goyal", // Or make this selectable
+        doctorPhone: "9929270337",
         date: new Date().toLocaleDateString(),
     };
 

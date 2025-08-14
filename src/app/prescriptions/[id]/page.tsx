@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ToothIcon } from "@/components/icons";
-import { Download, Printer, User } from "lucide-react";
+import { Download, Printer, User, Loader2 } from "lucide-react";
 import type { Prescription, Patient } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -13,6 +13,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     const [prescription, setPrescription] = useState<Prescription | null>(null);
     const [patient, setPatient] = useState<Patient | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     useEffect(() => {
         const storedPrescriptions = localStorage.getItem('prescriptions');
@@ -147,7 +148,7 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
                       </div>
                     )}
                     
-                    <div className="border-t pt-4 mt-8">
+                    <div className="border-t pt-4 mt-8 signature-section">
                         <p className="text-sm text-muted-foreground">Signature:</p>
                         <div className="h-16 border-b"></div>
                     </div>
@@ -156,8 +157,9 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
             </Card>
             <div className="flex justify-end gap-2 print:hidden">
                 <Button variant="outline" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4"/> Print</Button>
-                <Button disabled>
-                  <Download className="mr-2 h-4 w-4"/> Download PDF
+                <Button disabled={isDownloading}>
+                  {isDownloading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Download className="mr-2 h-4 w-4"/>}
+                  {isDownloading ? 'Downloading...' : 'Download PDF'}
                 </Button>
             </div>
         </div>
@@ -168,8 +170,10 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
             }
 
             @media print {
-                body {
-                    background-color: white;
+                html, body {
+                    height: initial !important;
+                    overflow: initial !important;
+                    -webkit-print-color-adjust: exact;
                 }
                 .print\\:hidden {
                     display: none;
@@ -186,5 +190,3 @@ export default function PrescriptionViewPage({ params }: { params: { id: string 
     </div>
   );
 }
-
-

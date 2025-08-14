@@ -34,6 +34,7 @@ export type Prescription = {
   id: string;
   patientName: string;
   doctorName: string;
+  doctorPhone: string;
   date: string;
   medications: Medication[];
   diagnoses?: Diagnosis[];
