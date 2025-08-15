@@ -1,6 +1,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { BadgeCheck, Hospital, Users } from "lucide-react";
 import Header from "@/components/layout/Header";
@@ -27,12 +27,12 @@ export default function AboutPage() {
               </div>
               <div>
                 <Image
-                  src="https://placehold.co/600x400.png"
+                  src="/assets/images/clinic1.jpg"
                   data-ai-hint="dental office reception"
-                  width={600}
-                  height={400}
+                  width="600"
+                  height="400"
                   alt="Clinic Interior"
-                  className="rounded-lg shadow-lg"
+                  className="rounded-lg shadow-lg cover w-full lg:h-[500px]"
                 />
               </div>
             </div>
@@ -47,7 +47,7 @@ export default function AboutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
                   <Card className="text-center p-6 shadow-md hover:shadow-xl transition-shadow">
                       <Avatar className="w-24 h-24 mx-auto mb-4 border-4 border-primary">
-                          <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="male doctor" />
+                          <AvatarImage src="/assets/images/doc_1.jpg" data-ai-hint="male doctor" />
                           <AvatarFallback>SKG</AvatarFallback>
                       </Avatar>
                       <h3 className="text-xl font-bold font-headline">Dr. Sushil Kumar Goyal</h3>
@@ -59,7 +59,7 @@ export default function AboutPage() {
                   </Card>
                   <Card className="text-center p-6 shadow-md hover:shadow-xl transition-shadow">
                       <Avatar className="w-24 h-24 mx-auto mb-4 border-4 border-primary">
-                          <AvatarImage src="https://placehold.co/100x100.png" data-ai-hint="female doctor" />
+                          <AvatarImage src="/assets/images/doc_2.jpg" data-ai-hint="female doctor" />
                           <AvatarFallback>MG</AvatarFallback>
                       </Avatar>
                       <h3 className="text-xl font-bold font-headline">Dr. Manju Goyal</h3>

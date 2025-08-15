@@ -12,7 +12,7 @@ const services = [
     title: "Cosmetic Dentistry",
     description: "Achieve the smile of your dreams with our cosmetic dentistry services. We offer teeth whitening, veneers, dental bonding, and smile makeovers to enhance your appearance and boost your confidence.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/cosmetic-treatment.jpg",
       hint: "cosmetic dentistry"
     }
   },
@@ -21,7 +21,7 @@ const services = [
     title: "Oral Surgery",
     description: "Our experienced surgeons perform a variety of oral surgery procedures, including tooth extractions, wisdom teeth removal, and dental implant placement, with a focus on your safety and comfort.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/oral_surgery.jpg",
       hint: "dental surgery"
     }
   },
@@ -30,7 +30,7 @@ const services = [
     title: "General Dentistry",
     description: "Maintain your oral health with our comprehensive general dentistry services. This includes routine check-ups, professional cleanings, fillings, and preventive care for the whole family.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/general_dentistry.jpg",
       hint: "dentist with patient"
     }
   },
@@ -39,7 +39,7 @@ const services = [
     title: "Dental Implants",
     description: "Restore your smile and function with dental implants, the gold standard for replacing missing teeth. We provide complete implant solutions from placement to restoration.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/dental_implants.jpg",
       hint: "dental implant"
     }
   },
@@ -48,7 +48,7 @@ const services = [
     title: "Orthodontics",
     description: "Straighten your teeth and correct bite issues with our orthodontic treatments. We offer traditional braces and modern clear aligners for both adults and teenagers.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/orthodental-treatment.jpg",
       hint: "orthodontics braces"
     }
   },
@@ -57,7 +57,7 @@ const services = [
     title: "Pediatric Dentistry",
     description: "We provide gentle and friendly dental care for children of all ages. Our goal is to make dental visits a positive experience and build a foundation for a lifetime of healthy smiles.",
     image: {
-      src: "https://placehold.co/600x400.png",
+      src: "/assets/images/pediatric_dentistry.jpg",
       hint: "child dentist"
     }
   }
@@ -85,7 +85,7 @@ export default function ServicesPage() {
                 <CardHeader className="p-0">
                    <Image
                       src={service.image.src}
-                      data-ai-hint={service.image.hint}
+                      
                       width={600}
                       height={400}
                       alt={service.title}

@@ -61,7 +61,7 @@ export default function Home() {
                 </div>
               </div>
               <Image
-                src="https://placehold.co/600x400.png"
+                src="/assets/images/clinic2.jpg"
                 data-ai-hint="dental clinic interior"
                 width="600"
                 height="400"
@@ -89,7 +89,7 @@ export default function Home() {
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
               <Image
-                src="https://placehold.co/600x400.png"
+                src="/assets/images/clinic1.jpg"
                 data-ai-hint="friendly dentist"
                 width="600"
                 height="400"
