@@ -24,6 +24,9 @@ export default function AboutPage() {
                 <p className="text-muted-foreground">
                   Our mission is to create a welcoming and comfortable environment where patients can receive the highest standard of dental treatment. We leverage state-of-the-art technology and a patient-centric approach to ensure optimal oral health and beautiful smiles for our community.
                 </p>
+                <p className="text-lg text-muted-foreground font-semibold">
+                  Pioneering dental care in Suratgarh since 1997, we proudly stand as the city's first and most trusted dental clinic.
+                </p>
               </div>
               <div>
                 <Image

@@ -6,6 +6,11 @@ import { ToothIcon } from "@/components/icons";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+export const metadata = {
+  title: "Our Dental Services | Goyal Dental Clinic | Cosmetic, General, Implants & More",
+  description: "Explore the wide range of dental services at Goyal Dental Clinic, including cosmetic dentistry, oral surgery, general dentistry, dental implants, orthodontics, and pediatric dentistry.",
+};
+
 const services = [
   {
     icon: <Sparkles className="h-10 w-10 text-primary" />,

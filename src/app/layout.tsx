@@ -24,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <link rel="icon" href="/tooth-icon.svg" type="image/svg+xml" />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-body antialiased",

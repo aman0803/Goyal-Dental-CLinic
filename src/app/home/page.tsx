@@ -8,6 +8,11 @@ import { ToothIcon } from "@/components/icons";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+export const metadata = {
+  title: "Goyal Dental Clinic | Your Smile, Our Passion | Comprehensive Dental Care",
+  description: "Welcome to Goyal Dental Clinic. We offer comprehensive dental care including cosmetic dentistry, general dentistry, and oral surgery with a patient-first approach and advanced technology.",
+};
+
 export default function Home() {
   const services = [
     {
@@ -84,6 +89,9 @@ export default function Home() {
                 </h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   At Goyal Dental Clinic, we are dedicated to providing the highest quality of dental care. Our clinic is equipped with state-of-the-art technology to ensure you receive the best treatment possible, all in a calm and welcoming environment.
+                </p>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed font-semibold">
+                  Pioneering dental care in Suratgarh since 1997, we proudly stand as the city's first and most trusted dental clinic.
                 </p>
               </div>
             </div>
